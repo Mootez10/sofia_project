@@ -1,0 +1,103 @@
+<!-- Register Form UI -->
+<div class="blank-layout-container justify-content-center align-items-center bg-light">
+  <div class="position-relative row w-100 h-100 bg-gredient justify-content-center">
+    <div class="col-lg-4 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <div class="text-center">
+            <a [routerLink]="['/dashboard']">
+              <img src="./assets/images/logos/dark-logo.svg" class="align-middle m-2" alt="logo" />
+            </a>
+          </div>
+
+          <!-- Social Auth -->
+          <div class="row m-t-24 custom-row">
+            <div class="col-12 col-sm-6">
+              <button mat-stroked-button class="w-100">
+                <div class="d-flex align-items-center">
+                  <img src="/assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-8" />
+                  <span>Sign in with Google</span>
+                </div>
+              </button>
+            </div>
+            <div class="col-12 col-sm-6">
+              <button mat-stroked-button class="w-100 d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                  <img src="/assets/images/svgs/facebook-icon.svg" alt="facebook" width="40" class="m-r-4" />
+                  Sign in with FB
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Register Form -->
+          <div class="or-border m-t-30">or sign up with</div>
+
+          <form class="m-t-30" (submit)="onRegister()" #registerForm="ngForm">
+            <mat-label>Name</mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+              <input matInput [(ngModel)]="registerData.name" name="name" required />
+            </mat-form-field>
+
+            <mat-label>Email Address</mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+              <input matInput type="email" [(ngModel)]="registerData.email" name="email" required />
+            </mat-form-field>
+
+            <mat-label>Password</mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+              <input matInput type="password" [(ngModel)]="registerData.password" name="password" required />
+            </mat-form-field>
+
+            <!-- File Input -->
+            <label for="formFileLg" class="f-s-14 f-w-600 m-b-12 d-block">Profile Picture</label>
+            <input class="form-control form-control-lg" id="formFileLg" type="file" (change)="onFileSelected($event)" required/>
+
+            <br /><br />
+
+            <button type="submit" mat-flat-button color="primary" class="w-100" [disabled]="registerForm.invalid">
+  Sign Up
+</button>
+
+          </form>
+
+          <!-- Hidden Modal Triggers -->
+          <button #successModalTrigger class="d-none" data-bs-toggle="modal" data-bs-target="#al-success-alert"></button>
+          <button #errorModalTrigger class="d-none" data-bs-toggle="modal" data-bs-target="#al-danger-alert"></button>
+
+          <!-- ✅ Success Modal -->
+          <div class="modal fade" id="al-success-alert" #successModalRef tabindex="-1">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content modal-filled bg-success-subtle text-success">
+                <div class="modal-body p-4 text-center">
+                  <i class="ti ti-circle-check fs-7"></i>
+                  <h4 class="mt-2">Well Done!</h4>
+                  <p class="mt-3 text-success-50">{{ successMessage }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ❌ Error Modal -->
+          <div class="modal fade" id="al-danger-alert" #errorModalRef tabindex="-1">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content modal-filled bg-danger-subtle">
+                <div class="modal-body p-4 text-center text-danger">
+                  <i class="ti ti-hexagon-letter-x fs-7"></i>
+                  <h4 class="mt-2">Oh snap!</h4>
+                  <p class="mt-3">{{ errorMessage }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Link -->
+          <span class="d-block f-w-500 text-center m-t-24">
+            Already have an Account?
+            <a [routerLink]="['/authentication/login']" class="text-decoration-none text-primary f-w-500 f-s-14">Sign In</a>
+          </span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

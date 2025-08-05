@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>Create user</h2>
+<mat-dialog-content>
+  <form>
+
+    <!-- Name -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input matInput [(ngModel)]="user.Name" name="Name" required />
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email Address</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input
+        matInput
+        [(ngModel)]="user.EmailAdress"
+        name="EmailAdress"
+        type="email"
+        required
+        #emailModel="ngModel"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <mat-error *ngIf="emailTaken">
+        Sorry, that email is already used. Try another?
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input
+        matInput
+        [(ngModel)]="user.Password"
+        name="Password"
+        type="password"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Role -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Rôle</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-select [(ngModel)]="user.Role" name="role" required (selectionChange)="setDescriptionBasedOnRole()">
+        <mat-option *ngFor="let role of roles" [value]="role.name">
+          {{ role.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Description</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input matInput [(ngModel)]="user.Description" name="Description" />
+    </mat-form-field>
+
+    <!-- Picture -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Picture</mat-label>
+    <input
+      class="form-control form-control-sm mt-2"
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+    />
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="btn btn-danger">Close</button>
+  <button mat-raised-button color="primary" (click)="submit()">Sign Up</button>
+</mat-dialog-actions>

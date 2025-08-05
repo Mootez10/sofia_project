@@ -1,0 +1,33 @@
+.success-alert,
+.error-alert {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  gap: 10px;
+  font-size: 15px;
+  width: 100%;
+}
+
+.success-alert {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+
+  mat-icon {
+    color: #2e7d32 !important;
+  }
+}
+
+.error-alert {
+  background-color: #ffebee;
+  color: #c62828;
+
+  mat-icon {
+    color: #c62828 !important;
+  }
+}
+
+.message-text {
+  flex: 1;
+}

@@ -1,0 +1,107 @@
+<!-- Users List -->
+<div class="user-management-container">
+
+  <!-- Create User Button -->
+  <div class="d-flex justify-content-end mb-3">
+   <button class="btn btn-outline-primary" (click)="openCreateDialog()" [disabled]="userRole === 'developer'">Create User</button>
+
+
+  </div>
+
+  <!-- Users Grid -->
+  <div class="row" *ngIf="users.length > 0">
+    <div class="col-md-4 mb-4" *ngFor="let user of users">
+      <div class="card user-card">
+        <div class="card-body text-center">
+
+          <!-- Avatar -->
+          <img [src]="user.picture ? getImageUrl(user.picture) : 'assets/images/profile/user-1.jpg'" alt="{{user.name}}"
+            class="rounded-circle user-image mb-3" />
+
+          <!-- Name -->
+          <h5 class="card-title">{{ user.name }}</h5>
+
+          <!-- Email -->
+          <p class="card-text text-muted">{{ user.email }}</p>
+
+          <!-- Role -->
+          <p class="card-text text-info fw-bold">{{ user.role }}</p>
+
+          <!-- Action Buttons -->
+          <div class="d-flex justify-content-around mt-3 action-icons-group">
+            <div class="text-center">
+              <button class="btn btn-link text-primary p-0" (click)="viewUser(user)" title="View">
+                <i class="ti ti-eye fs-4"></i>
+              </button>
+              <div class="icon-label">View</div>
+            </div>
+
+            <div class="text-center">
+              <button class="btn btn-link text-warning p-0" (click)="editUser(user)" title="Edit" [disabled]="userRole === 'developer'">
+                <i class="ti ti-pencil fs-4"></i>
+              </button>
+              <div class="icon-label">Edit</div>
+            </div>
+
+            <div class="text-center">
+              <button class="btn btn-link text-danger p-0" (click)="deleteUser(user)" title="Delete" [disabled]="userRole === 'developer'">
+                <i class="ti ti-trash fs-4"></i>
+              </button>
+              <div class="icon-label">Delete</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View User Modal -->
+<!-- <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewUserModalLabel">User Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [value]="selectedUser?.name" disabled>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [value]="selectedUser?.email" disabled>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Role</label>
+            <input type="text" class="form-control" [value]="selectedUser?.role" disabled>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" [value]="selectedUser?.description" disabled></textarea>
+          </div>
+
+          <div class="mb-3 text-center" *ngIf="selectedUser?.picture">
+            <img [src]="selectedUser.picture" alt="Profile" class="rounded-circle" width="100">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div> -->
+
+
+

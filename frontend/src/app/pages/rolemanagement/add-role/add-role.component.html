@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Create Role</h2>
+<mat-dialog-content>
+  <form>
+
+    <!-- Name -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input matInput [(ngModel)]="role.name" name="name" required />
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Description</mat-label>
+    <mat-form-field appearance="outline" class="w-100">
+      <input matInput [(ngModel)]="role.description" name="description" />
+    </mat-form-field>
+
+    <!-- Actions -->
+    <div class="mb-3">
+  <label class="fw-bold mb-2">Actions</label>
+
+  <ng-container *ngIf="groupedActions | keyvalue as groups; else loadingActions">
+    <div *ngFor="let group of groups" class="mb-2">
+      <div class="text-primary fw-semibold">{{ group.key }}</div>
+
+      <div *ngFor="let action of group.value">
+        <mat-checkbox
+          [checked]="isChecked(action)"
+          (change)="toggleAction(action)"
+          class="ms-2"
+        >
+          {{ action }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingActions>
+    <p>Loading actions...</p>
+  </ng-template>
+
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="errorMessage" class="text-danger mt-2">{{ errorMessage }}</div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()" class="btn btn-danger">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="submit()"
+    [disabled]="loading"
+  >
+    Create Role
+  </button>
+</mat-dialog-actions>

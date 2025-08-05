@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Role Details</h2>
+<mat-dialog-content>
+
+  <!-- Name -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
+  <mat-form-field appearance="outline" class="w-100">
+    <input matInput [(ngModel)]="data.role.name" name="name" [readonly]="true" />
+  </mat-form-field>
+
+  <!-- Description -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Description</mat-label>
+  <mat-form-field appearance="outline" class="w-100">
+    <input matInput [(ngModel)]="data.role.description" name="description" [readonly]="true" />
+  </mat-form-field>
+
+  <!-- Actions -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Actions</mat-label>
+  <div class="mb-2 ps-2">
+    <ul *ngIf="data.role.actions.length > 0; else noActions">
+      <li *ngFor="let action of data.role.actions">{{ action }}</li>
+    </ul>
+    <ng-template #noActions>
+      <p class="text-muted">No actions assigned.</p>
+    </ng-template>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="btn btn-danger">Close</button>
+</mat-dialog-actions>

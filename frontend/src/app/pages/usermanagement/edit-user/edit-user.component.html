@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Edit User</h2>
+
+<mat-dialog-content>
+
+  <!-- Picture -->
+  <div class="text-center mt-3 mb-4" *ngIf="user.picture">
+    <img
+      [src]="user.picture.startsWith('http') ? user.picture : environment.apiUrl + user.picture"
+      alt="Profile"
+      class="rounded-circle shadow-sm"
+      width="120"
+      height="120"
+    />
+  </div>
+
+  <!-- Name -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
+  <mat-form-field appearance="outline" class="w-100">
+    <input matInput [(ngModel)]="user.name" name="name" required />
+  </mat-form-field>
+
+  <!-- Email -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email Address</mat-label>
+  <mat-form-field appearance="outline" class="w-100">
+    <input matInput [(ngModel)]="user.email" name="email" required type="email" />
+  </mat-form-field>
+
+  <!-- Role -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Role</mat-label>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-select [(ngModel)]="user.role" name="role" required>
+      <mat-option value="user">User</mat-option>
+      <mat-option value="admin">Admin</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Description -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Description</mat-label>
+  <mat-form-field appearance="outline" class="w-100">
+    <input matInput [(ngModel)]="user.description" name="description" />
+  </mat-form-field>
+
+  <!-- Picture Upload -->
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Change Picture</mat-label>
+  <input
+    class="form-control form-control-sm mt-2"
+    type="file"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+  />
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="btn btn-danger">Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Update</button>
+</mat-dialog-actions>
