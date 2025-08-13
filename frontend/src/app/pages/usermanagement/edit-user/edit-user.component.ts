@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ import { environment } from 'src/environments/environment';
   imports: [
     CommonModule,
     FormsModule,
-    MatDialogModule, // ✅ Add this
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -26,10 +26,14 @@ import { environment } from 'src/environments/environment';
     MatOptionModule
   ]
 })
-export class EditUserComponent {
+export class EditUserComponent implements OnInit {
   environment = environment;
   user: any;
   selectedFile: File | null = null;
+
+  roles: Array<{ name: string }> = [];
+  loadingRoles = true;
+  rolesError = '';
 
   constructor(
     private dialogRef: MatDialogRef<EditUserComponent>,
@@ -39,9 +43,61 @@ export class EditUserComponent {
     this.user = { ...data.user };
   }
 
+  ngOnInit(): void {
+    this.fetchRoles();
+    this.setDescriptionBasedOnRole();
+  }
+
+  private fetchRoles(): void {
+    this.loadingRoles = true;
+    this.rolesError = '';
+    this.http.get<Array<{ name: string }>>(`${environment.apiUrl}/api/roles`).subscribe({
+      next: (res) => {
+        this.roles = res || [];
+
+        // Ensure the user's current role is present even if it's not in the list (legacy values)
+        if (this.user?.role && !this.roles.some(r => r.name === this.user.role)) {
+          this.roles.push({ name: this.user.role });
+        }
+
+        this.loadingRoles = false;
+      },
+      error: (err) => {
+        console.error('Failed to load roles:', err);
+        this.rolesError = 'Failed to load roles. Showing basic roles.';
+        // Fallback so the select isn’t empty
+        const fallback = [{ name: 'admin' }, { name: 'user' }];
+        this.roles = [...fallback];
+
+        if (this.user?.role && !this.roles.some(r => r.name === this.user.role)) {
+          this.roles.push({ name: this.user.role });
+        }
+
+        this.loadingRoles = false;
+      }
+    });
+  }
+
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0] || null;
   }
+
+  setDescriptionBasedOnRole(): void {
+  switch (this.user.role) {
+    case 'admin':
+      this.user.description = 'Full access to all features';
+      break;
+    case 'developer':
+      this.user.description = 'Developer role with limited management rights';
+      break;
+    case 'user':
+      this.user.description = 'Basic user role with dashboard access only';
+      break;
+    default:
+      this.user.description = '';
+  }
+}
+
 
   submit(): void {
     const formData = new FormData();
@@ -54,13 +110,10 @@ export class EditUserComponent {
       formData.append('picture', this.selectedFile);
     }
 
-    this.http.put(`${environment.apiUrl}/api/users/${this.user._id || this.user.id}`, formData).subscribe({
-      next: () => {
-        this.dialogRef.close('refresh');
-      },
-      error: (err) => {
-        console.error('Error updating user:', err);
-      }
+    const id = this.user._id || this.user.id;
+    this.http.put(`${environment.apiUrl}/api/users/${id}`, formData).subscribe({
+      next: () => this.dialogRef.close('refresh'),
+      error: (err) => console.error('Error updating user:', err)
     });
   }
 }

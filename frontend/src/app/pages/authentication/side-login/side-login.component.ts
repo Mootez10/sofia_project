@@ -1,11 +1,10 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { ModalService } from 'src/app/services/modal/modal.service'; // ✅ Your new modal service
+import { NotificationService } from 'src/app/services/notification/notification.service';
 
 @Component({
   selector: 'app-side-login',
@@ -13,58 +12,43 @@ import { ModalService } from 'src/app/services/modal/modal.service'; // ✅ Your
   imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './side-login.component.html',
 })
-export class AppSideLoginComponent implements AfterViewInit {
+export class AppSideLoginComponent {
   loginData = { email: '', password: '' };
-  errorMessage: string = '';
-
-  @ViewChild('loginSuccessModal') successModalRef!: ElementRef;
-  @ViewChild('loginErrorModal') errorModalRef!: ElementRef;
-
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private modalService: ModalService
-  ) { }
-
-  ngAfterViewInit() {
-    // Register modal in service
-    this.modalService.registerModal('loginSuccess', this.successModalRef.nativeElement);
-    this.modalService.registerModal('loginError', this.errorModalRef.nativeElement);
-
-  }
+    private notify: NotificationService
+  ) {}
 
   onLogin() {
-    this.errorMessage = '';
     const { email, password } = this.loginData;
+
+    if (!email || !password) {
+      this.notify.loginFailed('Email and password are required.');
+      return;
+    }
 
     this.authService.signin(email, password).subscribe({
       next: (response) => {
+        // Save token (your AuthService doesn't store it automatically)
         localStorage.setItem('token', response.token);
-        localStorage.setItem('userRole', response.user.role);
+
+        // Optional: show success before redirect
+        this.notify.loginSuccess();
+
+        // Ask API for where to go next, fallback to /profile
         this.authService.getRedirectPath().subscribe({
           next: (res) => {
-            // ✅ Show modal, then hide and redirect
-            this.modalService.showModal('loginSuccess');
-
-            setTimeout(() => {
-              this.modalService.hideModal('loginSuccess');
-              this.router.navigate([res.path]);
-            }, 2000); // Delay for user to read the message
+            setTimeout(() => this.router.navigate([res.path]), 1200);
           },
           error: () => {
-            this.router.navigate(['/profile']);
-          }
+            setTimeout(() => this.router.navigate(['/profile']), 1200);
+          },
         });
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Login failed. Please try again.';
-        this.modalService.showModal('loginError');
-
-        
-        setTimeout(() => {
-          this.modalService.hideModal('loginError');
-        }, 2000);
+        this.notify.loginFailed(err?.error?.message || 'Login failed. Please try again.');
       },
     });
   }

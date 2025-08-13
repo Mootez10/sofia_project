@@ -32,4 +32,18 @@ export class RoleService {
   deleteRole(id: string) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+  /**
+ * Fetches the list of actions assigned to a specific role.
+ *
+ * @param id - The unique identifier of the role (string).
+ *             This ID is used to request the actions linked to the given role from the backend.
+ *
+ * 
+ * */
+
+  getRoleWithActions(id: string) {
+  return this.http.get(`${environment.apiUrl}/api/roles/${id}/actions`);
+}
+
 }

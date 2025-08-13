@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/User.model');
 
 /**
  * Determines redirection path based on user role

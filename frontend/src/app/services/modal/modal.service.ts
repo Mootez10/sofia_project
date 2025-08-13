@@ -1,31 +1,53 @@
 import { Injectable } from '@angular/core';
-import { Modal } from 'bootstrap';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { RoleService } from 'src/app/services/role/role.service';
+import { DeleteRoleComponent } from 'src/app/pages/rolemanagement/delete-role/delete-role.component';
+import { DeleteUserComponent } from 'src/app/pages/usermanagement/delete-user/delete-user.component';
+import { UserService } from '../user/user.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+
+@Injectable({ providedIn: 'root' })
 export class ModalService {
-  private modals: { [key: string]: Modal } = {};
+  constructor(
+    private dialog: MatDialog,
+    private roleService: RoleService,
+    private userService: UserService
 
-  registerModal(id: string, element: HTMLElement) {
-    if (this.modals[id]) {
-      this.modals[id].dispose(); // ✅ Dispose old instance if any
-    }
-    this.modals[id] = new Modal(element, {
-      backdrop: 'static',
-      keyboard: false
+  ) {}
+
+  // Open the Delete Role dialog (simple, no generics beyond the dialog ref type)
+  openDeleteRole(role: any): MatDialogRef<DeleteRoleComponent, 'refresh' | undefined> {
+    return this.dialog.open(DeleteRoleComponent, {
+      data: { role },
+      autoFocus: false,
+      restoreFocus: false,
+      panelClass: ['confirm-anim'],
+      backdropClass: 'confirm-backdrop',
+      enterAnimationDuration: '160ms',
+      exitAnimationDuration: '120ms',
     });
   }
 
-  showModal(id: string) {
-    this.modals[id]?.show();
+  // Perform the actual delete (HTTP call)
+  deleteRole(roleId: string): Observable<any> {
+    return this.roleService.deleteRole(roleId);
   }
 
-  hideModal(id: string) {
-    this.modals[id]?.hide();
+  // ===== Users (NEW) =====
+  openDeleteUser(user: any): MatDialogRef<DeleteUserComponent, 'refresh' | undefined> {
+    return this.dialog.open(DeleteUserComponent, {
+      data: { user },
+      autoFocus: false,
+      restoreFocus: false,
+      panelClass: ['confirm-anim'],
+      backdropClass: 'confirm-backdrop',
+      enterAnimationDuration: '160ms',
+      exitAnimationDuration: '120ms',
+    });
   }
 
-  isRegistered(id: string): boolean {
-    return !!this.modals[id];
+  deleteUser(userId: string): Observable<void> {
+    return this.userService.deleteUser(userId);
   }
 }

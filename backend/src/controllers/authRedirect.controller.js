@@ -1,4 +1,4 @@
-const { getRedirectPath } = require('../services/authRedirect');
+const { getRedirectPath } = require('../services/authRedirect.service');
 
 /**
  * Controller: Returns redirect path based on role

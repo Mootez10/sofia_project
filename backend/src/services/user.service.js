@@ -1,60 +1,64 @@
-const User = require('../models/User');
+// services/user.service.js
+const User = require('../models/User.model');
 
-// ✅ Create a new user
-// Input:
-//   - userData: { name, emailAdress, password, role, description, picture }
-// Output:
-//   - saved user object
-exports.createUser = async (userData) => {
-  const { emailAdress } = userData;
+async function createUser({ name, email, password, role, description, picture }) {
+  // Validate required fields (controller already validates, but double-check here)
+  if (!name || !email || !password) {
+    throw new Error('Name, email, and password are required.');
+  }
 
-  // Check for existing user
-  const existingUser = await User.findOne({ email: emailAdress });
-  if (existingUser) {
+  // Unique by email
+  const exists = await User.findOne({ email });
+  if (exists) {
     throw new Error('Email already in use');
   }
 
-  const newUser = new User({
-    name: userData.name,
-    email: emailAdress,
-    password: userData.password, // You can hash here if needed
-    role: userData.role || 'user',
-    description: userData.description,
-    picture: userData.picture || null,
+  // Create user (password is already hashed by controller)
+  const user = await User.create({
+    name,
+    email,
+    password,
+    role: role || 'user',
+    description: description || '',
+    picture: picture || null,
   });
 
-  return await newUser.save();
-};
+  // Never expose password
+  const obj = user.toObject();
+  delete obj.password;
+  return obj;
+}
 
-// Get all users from the database (excluding passwords)
-// Input: none
-// Output: Array of user objects without passwords
-exports.getAllUsers = async () => {
-  return await User.find().select('-password');
-};
+async function getAllUsers() {
+  return User.find().select('-password');
+}
 
-// Get a specific user by ID (excluding password)
-// Input: id (String) - the ID of the user
-// Output: user object without password, or null if not found
-exports.getUserById = async (id) => {
-  return await User.findById(id).select('-password');
-};
+async function getUserById(id) {
+  return User.findById(id).select('-password');
+}
 
-// Update a user by ID
-// Input:
-//   - userId (String): the ID of the user to update
-//   - updateData (Object): fields to update (e.g., name, email, picture)
-// Output: updated user object without password, or null if not found
-exports.updateUser = async (userId, updateData) => {
-  return await User.findByIdAndUpdate(userId, updateData, {
-    new: true, // return the updated document
-    runValidators: true // apply schema validation
+async function updateUser(id, fields) {
+  // If password is provided, ensure it is hashed (should be hashed in controller)
+  if (fields?.password && !fields.password.startsWith('$2b$')) {
+    throw new Error('Password must be hashed before updateUser');
+  }
+
+  const user = await User.findByIdAndUpdate(id, fields, {
+    new: true,
+    runValidators: true,
   }).select('-password');
-};
 
-// Delete a user by ID
-// Input: id (String) - the ID of the user to delete
-// Output: deleted user object, or null if not found
-exports.deleteUser = async (id) => {
-  return await User.findByIdAndDelete(id);
+  return user;
+}
+
+async function deleteUser(id) {
+  return User.findByIdAndDelete(id).select('-password');
+}
+
+module.exports = {
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
 };

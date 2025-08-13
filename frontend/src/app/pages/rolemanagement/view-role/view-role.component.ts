@@ -26,15 +26,48 @@ import { RoleService } from '../../../services/role/role.service';
 })
 export class ViewRoleComponent implements OnInit {
   role: any;
+  // will hold action names regardless of where they come from
+  actionNames: string[] = [];
+  loading = true;
+  error = '';
 
   constructor(
     public dialogRef: MatDialogRef<ViewRoleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { role: any },
-    private roleService: RoleService // Optional: only needed if you want to re-fetch
+    private roleService: RoleService
   ) {}
 
   ngOnInit(): void {
     this.role = this.data.role;
+
+    // If the table row already contains names, show them immediately…
+    if (Array.isArray(this.role?.actions) && this.role.actions.length > 0) {
+      // could be strings or Action docs
+      this.actionNames = this.role.actions.map((a: any) => (typeof a === 'string' ? a : a?.name)).filter(Boolean);
+      this.loading = false;
+    }
+
+    // …but also fetch the authoritative list from /api/roles/:id/actions
+    const id = this.role?._id || this.role?.id;
+    if (!id) { this.loading = false; return; }
+
+   // Fetch actions from RoleAction join
+    this.roleService.getRoleWithActions(id).subscribe({
+      next: (res: any) => {
+        // Backend returns: { role, actions: [Action docs] }
+        if (Array.isArray(res?.actions)) {
+          this.actionNames = res.actions
+            .map((a: any) => a?.name || a)  // tolerate strings or docs
+            .filter(Boolean);
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load actions:', err);
+        this.error = 'Failed to load actions.';
+        this.loading = false;
+      }
+    });
   }
 
   close(): void {

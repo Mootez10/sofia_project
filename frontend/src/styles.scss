@@ -39,3 +39,81 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 
+.mat-mdc-snack-bar-container.snackbar-delete .mdc-button__label {
+  color: #ffffff; // dark red for delete
+  font-weight: bold;
+}
+
+/* ✅ Success snackbar */
+.snackbar-success {
+  background-color: #4caf50 !important; /* green */
+  color: white !important;
+  font-weight: 500;
+}
+
+/* ❌ Error snackbar */
+.snackbar-error {
+  background-color: #f44336 !important; /* red */
+  color: white !important;
+  font-weight: 500;
+}
+
+/* ---- Angular Material (MDC) snackbar theming ---- */
+.mat-mdc-snack-bar-container.snackbar--success .mdc-snackbar__surface {
+  background-color: #4caf50 !important; /* green */
+}
+.mat-mdc-snack-bar-container.snackbar--success .mdc-snackbar__label,
+.mat-mdc-snack-bar-container.snackbar--success .mdc-button__label {
+  color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar--error .mdc-snackbar__surface {
+  background-color: #f44336 !important; /* red */
+}
+.mat-mdc-snack-bar-container.snackbar--error .mdc-snackbar__label,
+.mat-mdc-snack-bar-container.snackbar--error .mdc-button__label {
+  color: #fff !important;
+}
+
+/* Optional (if you also use info/warning) */
+.mat-mdc-snack-bar-container.snackbar--info .mdc-snackbar__surface {
+  background-color: #2196f3 !important;
+}
+.mat-mdc-snack-bar-container.snackbar--info .mdc-snackbar__label,
+.mat-mdc-snack-bar-container.snackbar--info .mdc-button__label {
+  color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar--warning .mdc-snackbar__surface {
+  background-color: #ff9800 !important;
+}
+.mat-mdc-snack-bar-container.snackbar--warning .mdc-snackbar__label,
+.mat-mdc-snack-bar-container.snackbar--warning .mdc-button__label {
+  color: #111 !important;
+  font-weight: 600;
+}
+
+/* Backdrop fade */
+.confirm-backdrop.cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.28);
+  animation: backdropFadeIn 160ms ease-out both;
+}
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Dialog pop-in (fade + slight scale) */
+.cdk-overlay-pane.confirm-anim .mat-mdc-dialog-container {
+  animation: dialogPopIn 160ms cubic-bezier(0.2, 0, 0, 1) both;
+  transform-origin: center top;
+}
+@keyframes dialogPopIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+
+
+
+

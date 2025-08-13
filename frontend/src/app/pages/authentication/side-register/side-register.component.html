@@ -51,45 +51,14 @@
 
             <!-- File Input -->
             <label for="formFileLg" class="f-s-14 f-w-600 m-b-12 d-block">Profile Picture</label>
-            <input class="form-control form-control-lg" id="formFileLg" type="file" (change)="onFileSelected($event)" required/>
+            <input class="form-control form-control-lg" id="formFileLg" type="file" (change)="onFileSelected($event)" required />
 
             <br /><br />
 
             <button type="submit" mat-flat-button color="primary" class="w-100" [disabled]="registerForm.invalid">
-  Sign Up
-</button>
-
+              Sign Up
+            </button>
           </form>
-
-          <!-- Hidden Modal Triggers -->
-          <button #successModalTrigger class="d-none" data-bs-toggle="modal" data-bs-target="#al-success-alert"></button>
-          <button #errorModalTrigger class="d-none" data-bs-toggle="modal" data-bs-target="#al-danger-alert"></button>
-
-          <!-- ✅ Success Modal -->
-          <div class="modal fade" id="al-success-alert" #successModalRef tabindex="-1">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content modal-filled bg-success-subtle text-success">
-                <div class="modal-body p-4 text-center">
-                  <i class="ti ti-circle-check fs-7"></i>
-                  <h4 class="mt-2">Well Done!</h4>
-                  <p class="mt-3 text-success-50">{{ successMessage }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ❌ Error Modal -->
-          <div class="modal fade" id="al-danger-alert" #errorModalRef tabindex="-1">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content modal-filled bg-danger-subtle">
-                <div class="modal-body p-4 text-center text-danger">
-                  <i class="ti ti-hexagon-letter-x fs-7"></i>
-                  <h4 class="mt-2">Oh snap!</h4>
-                  <p class="mt-3">{{ errorMessage }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- Navigation Link -->
           <span class="d-block f-w-500 text-center m-t-24">

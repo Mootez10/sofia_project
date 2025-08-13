@@ -10,6 +10,13 @@ import { AddUserComponent } from '../add-user/add-user.component';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { DeleteUserComponent } from '../delete-user/delete-user.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
+
+
+
 
 
 declare const bootstrap: any;
@@ -17,7 +24,7 @@ declare const bootstrap: any;
 @Component({
   selector: 'app-list-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatSnackBarModule],
   templateUrl: './list-user.component.html',
   styleUrl: './list-user.component.scss',
 })
@@ -34,11 +41,12 @@ export class ListUserComponent implements OnInit {
 
   selectedUser: any = null;
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {}
+  constructor(private http: HttpClient, private dialog: MatDialog, private snackBar: MatSnackBar, private authService : AuthService, private modalService: ModalService,) {}
 
   ngOnInit(): void {
     this.userRole = localStorage.getItem('userRole');
     this.loadUsers();
+    console.log("from decode",this.authService.getCurrentUserFromToken())
     setTimeout(() => {
       const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
       tooltipTriggerList.forEach((el) => new Tooltip(el));
@@ -132,18 +140,13 @@ export class ListUserComponent implements OnInit {
   });
 }
 
-  deleteUser(user: any): void {
-  this.dialog.open(DeleteUserComponent, {
-    width: '100%',
-    maxWidth: '600px',
-    data: { user },
-  }).afterClosed().subscribe(result => {
-    if (result === 'refresh') {
-      this.loadUsers();
+// In your users list component
+deleteUser(user: any) {
+  this.modalService.openDeleteUser(user).afterClosed().subscribe(res => {
+    if (res === 'refresh') {
+      this.loadUsers(); // refresh your table
     }
   });
 }
-
-
-
 }
+

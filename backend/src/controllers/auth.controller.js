@@ -18,29 +18,22 @@ exports.register = async (req, res) => {
 
 
 // ✅ Handle user login
+// ✅ Handle user login
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const result = await loginUser({ email, password });
 
-    // Add this check 👇
-    if (!result || !result.token || !result.user) {
+    if (!result || !result.token) {
       return res.status(400).json({ message: 'Invalid login response' });
     }
 
-    // Send both token and user
-    res.json({
-      token: result.token,
-      user: {
-        role: result.user.role,
-        name: result.user.name,
-        email: result.user.email,
-        id: result.user._id
-      }
-    });
+    // ✅ ONLY token
+    return res.json({ token: result.token });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
+
 

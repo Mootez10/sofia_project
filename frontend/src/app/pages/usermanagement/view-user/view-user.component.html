@@ -7,7 +7,7 @@
       [src]="data.user.picture.startsWith('http') ? data.user.picture : environment.apiUrl + data.user.picture"
       alt="Profile"
       class="rounded-circle"
-      width="100"
+      width="50"
     />
   </div>
   <!-- Name -->
@@ -38,5 +38,5 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close class="btn btn-danger">Close</button>
+  <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
 </mat-dialog-actions>

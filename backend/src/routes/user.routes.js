@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
-const User = require('../models/User');
+const User = require('../models/User.model');
 const authenticateUser = require('../middlewares/authenticateUser'); // ✅ not destructured
 const upload = require('../middlewares/upload');
 

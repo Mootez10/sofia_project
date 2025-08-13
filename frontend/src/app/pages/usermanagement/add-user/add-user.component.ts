@@ -29,12 +29,13 @@ import { ChangeDetectorRef } from '@angular/core';
   ]
 })
 export class AddUserComponent implements OnInit {
+  // ✅ CHANGED: Using standard camelCase properties
   user: any = {
-    Name: '',
-    EmailAdress: '',
-    Password: '',
-    Role: '',
-    Description: '',
+    name: '',
+    email: '',
+    password: '',
+    role: '',
+    description: '',
   };
 
   roles: any[] = [];
@@ -57,9 +58,9 @@ export class AddUserComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiUrl}/api/roles`).subscribe({
       next: (res) => {
         this.roles = res;
-        // Set default role if needed
         if (this.roles.length) {
-          this.user.Role = this.roles[0].name;
+          // ✅ CHANGED: use the new 'role' property
+          this.user.role = this.roles[0].name;
           this.setDescriptionBasedOnRole();
         }
       },
@@ -69,21 +70,21 @@ export class AddUserComponent implements OnInit {
     });
   }
 
-  // Set description based on selected role
   setDescriptionBasedOnRole(): void {
-    const role = this.user.Role;
+    // ✅ CHANGED: use the new 'role' property
+    const role = this.user.role;
     switch (role) {
       case 'admin':
-        this.user.Description = 'Full access to all features';
+        this.user.description = 'Full access to all features';
         break;
       case 'developer':
-        this.user.Description = 'Developer role with limited management rights';
+        this.user.description = 'Developer role with limited management rights';
         break;
       case 'user':
-        this.user.Description = 'Basic user role with dashboard access only';
+        this.user.description = 'Basic user role with dashboard access only';
         break;
       default:
-        this.user.Description = '';
+        this.user.description = '';
     }
   }
 
@@ -93,11 +94,12 @@ export class AddUserComponent implements OnInit {
 
   submit(): void {
     const formData = new FormData();
-    formData.append('name', this.user.Name || '');
-    formData.append('emailAdress', this.user.EmailAdress || '');
-    formData.append('password', this.user.Password || '');
-    formData.append('role', this.user.Role || 'user');
-    formData.append('description', this.user.Description || '');
+    // ✅ CHANGED: Appending with the standardized field names
+    formData.append('name', this.user.name || '');
+    formData.append('email', this.user.email || '');
+    formData.append('password', this.user.password || '');
+    formData.append('role', this.user.role || 'user');
+    formData.append('description', this.user.description || '');
 
     if (this.selectedFile) {
       formData.append('picture', this.selectedFile);

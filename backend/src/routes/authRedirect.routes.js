@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { authRedirect } = require('../controllers/authRedirect');
+const { authRedirect } = require('../controllers/authRedirect.controller');
 const authenticateUser = require('../middlewares/authenticateUser');
 
 // ✅ Redirect based on role — GET /api/auth-redirect

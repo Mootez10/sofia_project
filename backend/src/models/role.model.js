@@ -10,10 +10,10 @@ const roleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  actions: {
-    type: [String], // Array of frontend interfaces/pages
-    default: []
-  }
+  // actions: {
+  //   type: [String], // Array of frontend interfaces/pages
+  //   default: []
+  // }
 });
 
 module.exports = mongoose.model('Role', roleSchema);

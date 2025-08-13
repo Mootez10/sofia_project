@@ -1,9 +1,9 @@
+// src/app/pages/users/delete-user/delete-user.component.ts
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { ModalService } from 'src/app/services/modal/modal.service';
 
 @Component({
   selector: 'app-delete-user',
@@ -13,23 +13,31 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [CommonModule, MatDialogModule, MatButtonModule],
 })
 export class DeleteUserComponent {
-  environment = environment;
+  errorMessage = '';
 
   constructor(
-    private dialogRef: MatDialogRef<DeleteUserComponent>,
+    private dialogRef: MatDialogRef<DeleteUserComponent, 'refresh' | undefined>,
     @Inject(MAT_DIALOG_DATA) public data: { user: any },
-    private http: HttpClient
+    private modalService: ModalService
   ) {}
-
-  confirmDelete(): void {
-    const id = this.data.user._id || this.data.user.id;
-    this.http.delete(`${environment.apiUrl}/api/users/${id}`).subscribe({
-      next: () => this.dialogRef.close('refresh'),
-      error: (err) => console.error('Failed to delete user:', err),
-    });
-  }
 
   cancel(): void {
     this.dialogRef.close();
+  }
+
+  confirmDelete(): void {
+    const id = this.data?.user?._id || this.data?.user?.id;
+    if (!id) {
+      this.errorMessage = 'Missing user id.';
+      return;
+    }
+
+    this.modalService.deleteUser(id).subscribe({
+      next: () => this.dialogRef.close('refresh'),
+      error: (err: any) => {
+        console.error('❌ Delete user error:', err);
+        this.errorMessage = err?.error?.message || 'Failed to delete user. Please try again.';
+      },
+    });
   }
 }

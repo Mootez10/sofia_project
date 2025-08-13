@@ -1,114 +1,120 @@
+const bcrypt = require('bcrypt'); // ✅ You were missing this
 const userService = require('../services/user.service');
-const User = require('../models/User');
+const User = require('../models/User.model');
 
 // ✅ Create a new user
-// Route: POST /api/users
+// Route: POST /api/users/add
 // Access: Private (admin only or similar logic)
 exports.createUser = async (req, res) => {
   try {
-    const { name, emailAdress, password, role, description } = req.body;
+    const { name, email, password, role, description } = req.body;
     const picture = req.file ? `/api/uploads/${req.file.filename}` : null;
 
-    const userData = { name, emailAdress, password, role, description, picture };
-    const newUser = await userService.createUser(userData);
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Name, email, and password are required.' });
+    }
 
-    res.status(201).json({ message: 'User created successfully', user: newUser });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await userService.createUser({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      description,
+      picture,
+    });
+
+    return res.status(201).json({ message: 'User created successfully', user });
   } catch (err) {
-    console.error('Create user error:', err);
-    if (err.message === 'Email already in use') {
+    // 👇 show the real reason in server logs
+    console.error('Create user error:', err.stack || err);
+
+    // duplicate key (email already exists)
+    if (err && (err.code === 11000 || err.message?.includes('duplicate key'))) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
+    // mongoose validation errors
+    if (err?.name === 'ValidationError') {
       return res.status(400).json({ message: err.message });
     }
-    res.status(500).json({ message: 'Server error' });
+    // our own thrown messages
+    if (err?.message === 'Email already in use' || err?.message === 'Name, email, and password are required.') {
+      return res.status(400).json({ message: err.message });
+    }
+
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
-
-
 // ✅ Get all users
-// Route: GET /api/users
-// Access: Private (admin or authenticated user)
-exports.getUsers = async (req, res) => {
+exports.getUsers = async (_req, res) => {
   try {
     const users = await userService.getAllUsers();
-    res.json(users);
+    return res.json(users);
   } catch (error) {
     console.error('Get users error:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
 // ✅ Get single user by ID
-// Route: GET /api/users/:id
-// Access: Private (admin or authenticated user)
 exports.getUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
+    return res.json(user);
   } catch (error) {
     console.error('Get user error:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
 // ✅ Update user (name, email, picture)
-// Route: PUT /api/users/:id
-// Access: Private (admin or user themselves)
-// Input: FormData (name, email, optional picture)
+// PUT /api/users/:id
 exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const { name, email } = req.body;
+    const { name, email, role, description, password } = req.body;
 
-    const updatedFields = { name, email };
+    const updatedFields = {};
+    if (name) updatedFields.name = name;
+    if (email) updatedFields.email = email;
+    if (role) updatedFields.role = role;
+    if (description) updatedFields.description = description;
+    if (password) updatedFields.password = await bcrypt.hash(password, 10);
 
-    if (req.file) {
-      updatedFields.picture = `/api/uploads/${req.file.filename}`;
-    }
+    // ✅ use backticks
+    if (req.file) updatedFields.picture = `/api/uploads/${req.file.filename}`;
 
     const updatedUser = await userService.updateUser(userId, updatedFields);
+    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(200).json({
-      message: 'User updated successfully',
-      user: updatedUser,
-    });
+    return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
   } catch (error) {
     console.error('Update user error:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
 // ✅ Delete user by ID
-// Route: DELETE /api/users/:id
-// Access: Private (admin or user themselves)
 exports.deleteUser = async (req, res) => {
   try {
     const deletedUser = await userService.deleteUser(req.params.id);
     if (!deletedUser) return res.status(404).json({ message: 'User not found' });
-    res.json({ message: 'User deleted successfully' });
+    return res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Delete user error:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
 // ✅ Get current authenticated user's profile
-// Route: GET /api/users/profile
-// Access: Private (requires JWT)
 exports.getUserProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
-
     const user = await User.findById(userId).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ message: 'User Not Found' });
-    }
-
+    if (!user) return res.status(404).json({ message: 'User Not Found' });
     return res.status(200).json({ user });
   } catch (error) {
     console.error('Error fetching profile', error);

@@ -1,58 +1,56 @@
-<div class="mat-elevation-z8 table-wrapper">
-  <!-- Create Role Button -->
-  <div class="d-flex justify-content-end mb-3">
+<div class="table-card mat-elevation-z4">
+  <!-- Header actions -->
+  <div class="table-toolbar">
     <button class="btn btn-outline-primary" (click)="openCreateDialog()">
       Create Role
     </button>
   </div>
 
-  <table mat-table [dataSource]="dataSource" class="mat-table" *ngIf="dataSource.data.length > 0">
-    <!-- Name Column -->
+  <table mat-table [dataSource]="dataSource" class="nice-table mat-mdc-table" *ngIf="dataSource.data.length > 0">
+    <!-- Name -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
       <td mat-cell *matCellDef="let element"> {{ element.name }} </td>
     </ng-container>
 
-    <!-- Description Column -->
+    <!-- Description -->
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef> Description </th>
       <td mat-cell *matCellDef="let element"> {{ element.description }} </td>
     </ng-container>
 
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let element">
-        <div class="d-flex justify-content-around mt-2 action-icons-group">
-          <div class="text-center">
-            <button class="btn btn-link text-primary p-0" (click)="viewRole(element)" title="View">
-              <i class="ti ti-eye fs-4"></i>
-            </button>
-            <div class="icon-label">View</div>
-          </div>
+    <!-- Actions -->
+<ng-container matColumnDef="actions">
+  <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
+  <td mat-cell *matCellDef="let element">
+    <div class="action-icons-group d-flex align-items-center">
+      <button type="button" class="btn btn-link text-primary p-0 d-inline-flex align-items-center gap-1"
+        (click)="viewRole(element)" title="View" aria-label="View role">
+        <i class="ti ti-eye fs-12"></i>
+        <span class="icon-label">View</span>
+      </button>
 
-          <div class="text-center">
-            <button class="btn btn-link text-warning p-0" (click)="editRole(element)" title="Edit" [disabled]="userRole === 'developer'">
-              <i class="ti ti-pencil fs-4"></i>
-            </button>
-            <div class="icon-label">Edit</div>
-          </div>
+      <button type="button" class="btn btn-link text-warning p-0 d-inline-flex align-items-center gap-1"
+        (click)="editRole(element)" title="Edit" aria-label="Edit role">
+        <i class="ti ti-pencil fs-12"></i>
+        <span class="icon-label">Edit</span>
+      </button>
 
-          <div class="text-center">
-            <button class="btn btn-link text-danger p-0" (click)="deleteRole(element)" title="Delete" [disabled]="userRole === 'developer'">
-              <i class="ti ti-trash fs-4"></i>
-            </button>
-            <div class="icon-label">Delete</div>
-          </div>
-        </div>
-      </td>
-    </ng-container>
+      <button type="button" class="btn btn-link text-danger p-0 d-inline-flex align-items-center gap-1"
+        (click)="deleteRole(element)" title="Delete" aria-label="Delete role">
+        <i class="ti ti-trash fs-12"></i>
+        <span class="icon-label">Delete</span>
+      </button>
+    </div>
+  </td>
+</ng-container>
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+  <div *ngIf="dataSource.data.length === 0" class="empty">
     No roles found.
   </div>
 

@@ -1,24 +1,33 @@
 <h2 mat-dialog-title>Role Details</h2>
+
 <mat-dialog-content>
 
   <!-- Name -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
-  <mat-form-field appearance="outline" class="w-100">
-    <input matInput [(ngModel)]="data.role.name" name="name" [readonly]="true" />
+  <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+    <mat-label>Name</mat-label>
+    <input matInput [ngModel]="role.name" name="name" readonly />
   </mat-form-field>
 
   <!-- Description -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Description</mat-label>
-  <mat-form-field appearance="outline" class="w-100">
-    <input matInput [(ngModel)]="data.role.description" name="description" [readonly]="true" />
+  <mat-form-field appearance="outline" floatLabel="always" class="w-100">
+    <mat-label>Description</mat-label>
+    <input matInput [ngModel]="role.description" name="description" readonly />
   </mat-form-field>
 
   <!-- Actions -->
   <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Actions</mat-label>
   <div class="mb-2 ps-2">
-    <ul *ngIf="data.role.actions.length > 0; else noActions">
-      <li *ngFor="let action of data.role.actions">{{ action }}</li>
+    <!-- Loading -->
+    <p *ngIf="loading">Loading actions…</p>
+    <!-- Error -->
+    <p *ngIf="!loading && error" class="text-danger">{{ error }}</p>
+
+    <!-- Actions list -->
+    <ul *ngIf="!loading && !error && actionNames.length > 0; else noActions">
+      <li *ngFor="let action of actionNames">{{ action }}</li>
     </ul>
+
+    <!-- No actions -->
     <ng-template #noActions>
       <p class="text-muted">No actions assigned.</p>
     </ng-template>
@@ -27,5 +36,5 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close class="btn btn-danger">Close</button>
+  <button mat-button mat-dialog-close mat-raised-button>Close</button>
 </mat-dialog-actions>

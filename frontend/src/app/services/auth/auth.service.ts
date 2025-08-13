@@ -2,60 +2,74 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor(private http: HttpClient, private router: Router) {}
+  private jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  signup(name: string, email: string, password: string, picture?: File) {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('role', 'user');
+    if (picture) {
+      formData.append('picture', picture);
+    }
 
-signup(name: string, email: string, password: string, picture?: File) {
-  const formData = new FormData();
-  formData.append('name', name);
-  formData.append('email', email);
-  formData.append('password', password);
-  if (picture) {
-    formData.append('picture', picture);
+    return this.http.post(`${environment.apiUrl}/api/auth/signup`, formData);
   }
 
-  return this.http.post(`${environment.apiUrl}/api/auth/signup`, formData);
-}
+  signin(email: string, password: string) {
+    return this.http.post<{ token: string }>(
+      `${environment.apiUrl}/api/auth/signin`,
+      { email, password }
+    );
+  }
 
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/authentication/login']);
+  }
 
-signin(email: String, password: String){
-  const body = {email, password};
-  return this.http.post<{ token: string; user: { email: string; role: string } }>(`${environment.apiUrl}/api/auth/signin`, body
-);
+  isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
 
-}
+  getToken() {
+    return localStorage.getItem('token');
+  }
 
-logout(){
-  localStorage.removeItem('token');
-  this.router.navigate(['/authentication/login']);
-}
+  getProfile() {
+    const headers = {
+      Authorization: `Bearer ${this.getToken()}`,
+    };
+    return this.http.get<{ user: any }>(`${environment.apiUrl}/api/profile`, {
+      headers,
+    });
+  }
 
-isLoggedIn(){
-  return !!localStorage.getItem('token')
-}
+  getRedirectPath() {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    return this.http.get<{ path: string }>(
+      `${environment.apiUrl}/api/auth-redirect`,
+      { headers }
+    );
+  }
 
-getToken(){
-  return localStorage.getItem('token')
-}
+  getCurrentUserFromToken() {
+    const token = this.getToken();
+    if (!token || this.jwtHelper.isTokenExpired(token)) {
+      return null;
+    }
+    const decodedToken = this.jwtHelper.decodeToken(token);
 
-getProfile() {
-  const headers = {
-    Authorization: `Bearer ${this.getToken()}`
-  };
-  return this.http.get<{ user: any }>(`${environment.apiUrl}/api/profile`, { headers });
-}
-
-getRedirectPath() {
-  const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
-  return this.http.get<{ path: string }>(`${environment.apiUrl}/api/auth-redirect`, { headers });
-}
-
-
-
-
+    return decodedToken;
+  }
 }

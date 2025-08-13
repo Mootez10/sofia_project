@@ -14,6 +14,8 @@ exports.createRole = async (req, res) => {
   }
 };
 
+
+
 // ✅ Get all roles
 exports.getRoles = async (req, res) => {
   try {
@@ -58,5 +60,32 @@ exports.deleteRole = async (req, res) => {
   } catch (err) {
     console.error('Delete role error:', err);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
+
+// ✅ POST /api/roles/create-role-with-actions
+exports.createRoleWithActions = async (req, res) => {
+  try {
+    const { roleName, description, actionIds } = req.body; // actionIds: string[]
+    const result = await roleService.createRoleWithActions(roleName, description, actionIds || []);
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+
+// ✅ GET /api/roles/:id/actions
+exports.getRoleWithActions = async (req, res) => {
+  try {
+    const result = await roleService.getRoleWithActionsById(req.params.id);
+    res.json(result);
+  } catch (err) {
+    const code = err.message === 'Role not found' ? 404 : 500;
+    res.status(code).json({ message: err.message });
   }
 };

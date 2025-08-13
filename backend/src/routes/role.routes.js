@@ -26,4 +26,9 @@ router.put('/:id', roleController.updateRole);
 // DELETE /api/roles/:id
 router.delete('/:id', roleController.deleteRole);
 
+
+router.post('/create-role-with-actions', roleController.createRoleWithActions);
+
+router.get('/:id/actions', roleController.getRoleWithActions);
+
 module.exports = router;
