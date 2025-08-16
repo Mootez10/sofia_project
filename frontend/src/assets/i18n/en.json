@@ -64,5 +64,26 @@
     "successEdit": "User updated successfully.",
     "successDelete": "User deleted successfully.",
     "error": "An error occurred. Please try again."
+  },
+  "roleManagement": {
+    "addRole": "Add Role",
+    "editRole": "Edit Role",
+    "roleDetails": "Role Details",
+    "createRole": "Create Role",
+    "name": "Name",
+    "description": "Description",
+    "actions": "Actions",
+    "loadingActions": "Loading actions...",
+    "noActions": "No actions assigned.",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirmDelete": "Are you sure you want to delete this role?",
+    "confirmYes": "Yes, I'm sure",
+    "confirmNo": "No, cancel",
+    "noRolesFound": "No roles found."
   }
 }

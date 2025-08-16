@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { RoleService } from '../../../services/role/role.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -25,7 +26,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
+    TranslateModule
   ],
 })
 export class AddRoleComponent implements OnInit {

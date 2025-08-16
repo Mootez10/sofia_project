@@ -1,40 +1,40 @@
-<h2 mat-dialog-title>Role Details</h2>
+<h2 mat-dialog-title>{{ 'roleManagement.roleDetails' | translate }}</h2>
 
 <mat-dialog-content>
 
   <!-- Name -->
   <mat-form-field appearance="outline" floatLabel="always" class="w-100">
-    <mat-label>Name</mat-label>
+    <mat-label>{{ 'roleManagement.name' | translate }}</mat-label>
     <input matInput [ngModel]="role.name" name="name" readonly />
   </mat-form-field>
 
   <!-- Description -->
   <mat-form-field appearance="outline" floatLabel="always" class="w-100">
-    <mat-label>Description</mat-label>
+    <mat-label>{{ 'roleManagement.description' | translate }}</mat-label>
     <input matInput [ngModel]="role.description" name="description" readonly />
   </mat-form-field>
 
   <!-- Actions -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Actions</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">{{ 'roleManagement.actions' | translate }}</mat-label>
   <div class="mb-2 ps-2">
     <!-- Loading -->
-    <p *ngIf="loading">Loading actions…</p>
+    <p *ngIf="loading">{{ 'roleManagement.loadingActions' | translate }}</p>
     <!-- Error -->
     <p *ngIf="!loading && error" class="text-danger">{{ error }}</p>
 
     <!-- Actions list -->
     <ul *ngIf="!loading && !error && actionNames.length > 0; else noActions">
-      <li *ngFor="let action of actionNames">{{ action }}</li>
+      <li *ngFor="let action of actionNames">{{ action | translate }}</li>
     </ul>
 
     <!-- No actions -->
     <ng-template #noActions>
-      <p class="text-muted">No actions assigned.</p>
+      <p class="text-muted">{{ 'roleManagement.noActions' | translate }}</p>
     </ng-template>
   </div>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close mat-raised-button>Close</button>
+  <button mat-button mat-dialog-close mat-raised-button>{{ 'roleManagement.close' | translate }}</button>
 </mat-dialog-actions>

@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { RoleService } from '../../../services/role/role.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-role',
@@ -23,7 +24,8 @@ import { RoleService } from '../../../services/role/role.service';
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
-    MatButtonModule
+    MatButtonModule,
+    TranslateModule
   ],
 })
 export class EditRoleComponent implements OnInit {

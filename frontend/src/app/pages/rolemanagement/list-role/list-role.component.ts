@@ -11,6 +11,7 @@ import { AddRoleComponent } from '../add-role/add-role.component';
 import { ViewRoleComponent } from '../view-role/view-role.component';
 import { EditRoleComponent } from '../edit-role/edit-role.component';
 import { DeleteRoleComponent } from '../delete-role/delete-role.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -26,7 +27,7 @@ export interface RoleElement {
   standalone: true,
   templateUrl: './list-role.component.html',
   styleUrls: ['./list-role.component.scss'],
-  imports: [CommonModule, MatTableModule, MatPaginatorModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, TranslateModule],
 })
 export class ListRoleComponent implements OnInit {
   userRole: string | null = null;

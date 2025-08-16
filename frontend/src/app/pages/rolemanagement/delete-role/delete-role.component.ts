@@ -5,6 +5,7 @@ import { ModalService } from 'src/app/services/modal/modal.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
   standalone: true,
   templateUrl: './delete-role.component.html',
   styleUrls: ['./delete-role.component.scss'],
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, TranslateModule],
   animations: [
     trigger('dialogPop', [
       transition(':enter', [

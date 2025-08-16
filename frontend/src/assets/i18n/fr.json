@@ -63,6 +63,27 @@
     "successEdit": "Utilisateur modifié avec succès.",
     "successDelete": "Utilisateur supprimé avec succès.",
     "error": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "roleManagement": {
+    "addRole": "Ajouter un rôle",
+    "editRole": "Modifier le rôle",
+    "roleDetails": "Détails du rôle",
+    "createRole": "Créer un rôle",
+    "name": "Nom",
+    "description": "Description",
+    "actions": "Actions",
+    "loadingActions": "Chargement des actions...",
+    "noActions": "Aucune action assignée.",
+    "view": "Voir",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "saveChanges": "Enregistrer les modifications",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce rôle ?",
+    "confirmYes": "Oui, je confirme",
+    "confirmNo": "Non, annuler",
+    "noRolesFound": "Aucun rôle trouvé."
   }
 }
 

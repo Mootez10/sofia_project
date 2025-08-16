@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RoleService } from '../../../services/role/role.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-view-role',
@@ -21,7 +22,8 @@ import { RoleService } from '../../../services/role/role.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    TranslateModule
   ]
 })
 export class ViewRoleComponent implements OnInit {
