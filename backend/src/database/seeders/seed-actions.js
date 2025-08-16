@@ -25,15 +25,16 @@ async function seedActions() {
       const exists = await Action.findOne({ name: action.name });
       if (!exists) {
         await Action.create(action);
-      } 
+      }
     }
 
     process.exit();
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('seedActions error:', err);
+    }
     process.exit(1);
   }
 }
-  
-
 
 seedActions();

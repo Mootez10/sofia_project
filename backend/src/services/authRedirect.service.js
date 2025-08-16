@@ -8,12 +8,19 @@ const MSG = require('../constants/messages');
  * @throws {Error} - If user not found
  */
 const getRedirectPath = async (userId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    throw new Error(MSG.USER_NOT_FOUND);
-  }
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error(MSG.USER_NOT_FOUND);
+    }
 
-  return user.role === 'admin' ? '/dashboard' : '/profile';
+    return user.role === 'admin' ? '/dashboard' : '/profile';
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getRedirectPath error:', err);
+    }
+    throw err;
+  }
 };
 
 module.exports = { getRedirectPath };

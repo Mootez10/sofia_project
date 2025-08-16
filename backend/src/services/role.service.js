@@ -7,34 +7,75 @@ const MSG = require('../constants/messages');
 
 // ✅ Create a role
 exports.createRole = async (data) => {
-  const exists = await Role.findOne({ name: data.name });
-  if (exists) throw new Error(MSG.ROLE_ALREADY_EXISTS);
+  try {
+    const exists = await Role.findOne({ name: data.name });
+    if (exists) throw new Error(MSG.ROLE_ALREADY_EXISTS);
 
-  const role = new Role({
-    name: data.name,
-    description: data.description,
-    actions: data.actions || []
-  });
+    const role = new Role({
+      name: data.name,
+      description: data.description,
+      actions: data.actions || []
+    });
 
-  return await role.save();
+    return await role.save();
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('createRole error:', err);
+    }
+    throw err;
+  }
 };
 
 // ✅ Get all roles
-exports.getAllRoles = async () => Role.find();
+exports.getAllRoles = async () => {
+  try {
+    return Role.find();
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getAllRoles error:', err);
+    }
+    throw err;
+  }
+};
 
 // ✅ Get a role by ID
-exports.getRoleById = async (id) => Role.findById(id);
+exports.getRoleById = async (id) => {
+  try {
+    return Role.findById(id);
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getRoleById error:', err);
+    }
+    throw err;
+  }
+};
 
 // ✅ Update a role
 exports.updateRole = async (id, updateData) => {
-  return await Role.findByIdAndUpdate(id, updateData, {
-    new: true,
-    runValidators: true
-  });
+  try {
+    return await Role.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true
+    });
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('updateRole error:', err);
+    }
+    throw err;
+  }
 };
 
 // ✅ Delete a role
-exports.deleteRole = async (id) => Role.findByIdAndDelete(id);
+exports.deleteRole = async (id) => {
+  try {
+    return Role.findByIdAndDelete(id);
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('deleteRole error:', err);
+    }
+    throw err;
+  }
+};
 
 // ✅ Create role + link action IDs (atomic with transaction)
 exports.createRoleWithActions = async (roleName, description, actionIds = []) => {
@@ -68,6 +109,11 @@ exports.createRoleWithActions = async (roleName, description, actionIds = []) =>
     const role = await Role.findOne({ name: roleName });
     const actions = await Action.find({ _id: { $in: actionIds } });
     return { role, actions };
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('createRoleWithActions error:', err);
+    }
+    throw err;
   } finally {
     session.endSession();
   }
@@ -75,15 +121,22 @@ exports.createRoleWithActions = async (roleName, description, actionIds = []) =>
 
 // ✅ Fetch role + actions via RoleAction; fallback to Role.actions (names)
 exports.getRoleWithActionsById = async (roleId) => {
-  const role = await Role.findById(roleId);
-  if (!role) throw new Error(MSG.ROLE_NOT_FOUND);
+  try {
+    const role = await Role.findById(roleId);
+    if (!role) throw new Error(MSG.ROLE_NOT_FOUND);
 
-  const roleActions = await RoleAction.find({ roleId }).populate('actionId');
-  let actions = roleActions.map(ra => ra.actionId).filter(Boolean);
+    const roleActions = await RoleAction.find({ roleId }).populate('actionId');
+    let actions = roleActions.map(ra => ra.actionId).filter(Boolean);
 
-  if (!actions.length && Array.isArray(role.actions) && role.actions.length) {
-    actions = await Action.find({ name: { $in: role.actions } });
+    if (!actions.length && Array.isArray(role.actions) && role.actions.length) {
+      actions = await Action.find({ name: { $in: role.actions } });
+    }
+
+    return { role, actions };
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getRoleWithActionsById error:', err);
+    }
+    throw err;
   }
-
-  return { role, actions };
 };

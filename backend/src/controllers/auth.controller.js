@@ -12,6 +12,9 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ message: MSG.USER_REGISTERED_SUCCESS, user });
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('register error:', error);
+    }
     res.status(400).json({ message: error.message });
   }
 };
@@ -31,6 +34,9 @@ exports.login = async (req, res) => {
     // ✅ ONLY token
     return res.json({ token: result.token });
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('login error:', error);
+    }
     return res.status(400).json({ message: error.message });
   }
 };

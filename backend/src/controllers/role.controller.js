@@ -7,6 +7,9 @@ exports.createRole = async (req, res) => {
     const role = await roleService.createRole(req.body);
     res.status(201).json({ message: MSG.ROLE_CREATED_SUCCESS, role });
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('createRole error:', err);
+    }
     if (err.message === MSG.ROLE_ALREADY_EXISTS) {
       return res.status(409).json({ message: err.message });
     }
@@ -22,6 +25,9 @@ exports.getRoles = async (req, res) => {
     const roles = await roleService.getAllRoles();
     res.json(roles);
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getRoles error:', err);
+    }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -33,6 +39,9 @@ exports.getRole = async (req, res) => {
     if (!role) return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
     res.json(role);
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getRole error:', err);
+    }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -44,6 +53,9 @@ exports.updateRole = async (req, res) => {
     if (!updatedRole) return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
     res.json({ message: MSG.ROLE_UPDATED_SUCCESS, role: updatedRole });
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('updateRole error:', err);
+    }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -55,6 +67,9 @@ exports.deleteRole = async (req, res) => {
     if (!deleted) return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
     res.json({ message: MSG.ROLE_DELETED_SUCCESS });
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('deleteRole error:', err);
+    }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -70,6 +85,9 @@ exports.createRoleWithActions = async (req, res) => {
     const result = await roleService.createRoleWithActions(roleName, description, actionIds || []);
     res.status(201).json(result);
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('createRoleWithActions error:', err);
+    }
     res.status(400).json({ message: err.message });
   }
 };
@@ -81,6 +99,9 @@ exports.getRoleWithActions = async (req, res) => {
     const result = await roleService.getRoleWithActionsById(req.params.id);
     res.json(result);
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getRoleWithActions error:', err);
+    }
     const code = err.message === MSG.ROLE_NOT_FOUND ? 404 : 500;
     res.status(code).json({ message: err.message });
   }

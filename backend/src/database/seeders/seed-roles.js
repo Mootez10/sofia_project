@@ -37,6 +37,9 @@ async function seedRoles() {
     await Role.insertMany(roles);
     process.exit();
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('seedRoles error:', err);
+    }
     process.exit(1);
   }
 }

@@ -28,6 +28,9 @@ exports.createUser = async (req, res) => {
 
     return res.status(201).json({ message: MSG.USER_CREATED_SUCCESS, user });
   } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('createUser error:', err);
+    }
     // duplicate key (email already exists)
     if (err && (err.code === 11000 || err.message?.includes('duplicate key'))) {
       return res.status(400).json({ message: MSG.EMAIL_ALREADY_USED });
@@ -51,6 +54,9 @@ exports.getUsers = async (_req, res) => {
     const users = await userService.getAllUsers();
     return res.json(users);
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getUsers error:', error);
+    }
     return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -62,6 +68,9 @@ exports.getUser = async (req, res) => {
     if (!user) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
     return res.json(user);
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getUser error:', error);
+    }
     return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -88,6 +97,9 @@ exports.updateUser = async (req, res) => {
 
     return res.status(200).json({ message: MSG.USER_UPDATED_SUCCESS, user: updatedUser });
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('updateUser error:', error);
+    }
     return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -99,6 +111,9 @@ exports.deleteUser = async (req, res) => {
     if (!deletedUser) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
     return res.json({ message: MSG.USER_DELETED_SUCCESS });
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('deleteUser error:', error);
+    }
     return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
@@ -111,6 +126,9 @@ exports.getUserProfile = async (req, res) => {
     if (!user) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
     return res.status(200).json({ user });
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getUserProfile error:', error);
+    }
     return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };

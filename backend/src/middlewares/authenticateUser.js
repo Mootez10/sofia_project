@@ -7,6 +7,9 @@ const authenticateUser = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('authenticateUser error: No token provided');
+    }
     return res.status(401).json({ message: MSG.NO_TOKEN });
   }
 
@@ -15,6 +18,9 @@ const authenticateUser = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('authenticateUser error:', error);
+    }
     return res.status(403).json({ message: MSG.INVALID_TOKEN });
   }
 };

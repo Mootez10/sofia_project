@@ -20,6 +20,9 @@ const upload = multer({
     const mimetype = filetypes.test(file.mimetype);
 
     if (mimetype && extname) return cb(null, true);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('upload error: Invalid file type', file.originalname);
+    }
     cb(new Error(MSG.FAILED_TO_LOAD_ACTIONS));
   }
 });

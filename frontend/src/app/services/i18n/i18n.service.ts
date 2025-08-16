@@ -11,9 +11,9 @@ export class I18nService {
     @Inject(DOCUMENT) private doc: Document
   ) {
     this.translate.addLangs(['en', 'fr']);
-    this.translate.setDefaultLang('en');
+    this.translate.setDefaultLang('fr');
 
-    const saved = localStorage.getItem('lang') || 'en';
+    const saved = localStorage.getItem('lang') || 'fr';
     this.use(saved);
   }
 
