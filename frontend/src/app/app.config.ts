@@ -15,8 +15,9 @@ import {
   withComponentInputBinding,
   withInMemoryScrolling,
 } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideClientHydration } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -27,12 +28,17 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 // perfect scrollbar
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
-//Import all material modules
+// material + forms
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { authGuard } from './guards/auth.guard';
+
 import { authInterceptor } from './interceptors/auth.interceptor';
 
+// AoT requires an exported factory function
+export function HttpLoaderFactory(http: HttpClient) {
+  // loads /assets/i18n/<lang>.json
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,16 +51,32 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding()
     ),
-    provideHttpClient(withInterceptors([authInterceptor])),
-    provideHttpClient(withInterceptorsFromDi()),
+    // one provideHttpClient call with both interceptor sources
+    provideHttpClient(
+      withInterceptors([authInterceptor]),
+      withInterceptorsFromDi()
+    ),
     provideClientHydration(),
     provideAnimationsAsync(),
+
     importProvidersFrom(
       FormsModule,
       ReactiveFormsModule,
       MaterialModule,
       TablerIconsModule.pick(TablerIcons),
       NgScrollbarModule,
-    ), provideAnimationsAsync(), provideAnimationsAsync(),
+
+      // 🔹 ngx-translate
+      TranslateModule.forRoot({
+        defaultLanguage: 'en',
+        useDefaultLang: true,
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient],
+        },
+        isolate: false, // share the same TranslateService across standalone/lazy comps
+      })
+    ),
   ],
 };

@@ -1,29 +1,12 @@
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
-  {
-    navCap: 'Home',
-  },
-  {
-    displayName: 'Dashboard',
-    iconName: 'layout-grid-add',
-    route: '/dashboard',
-  },
+  { navCap: 'nav.home' },
+  { displayName: 'nav.dashboard', iconName: 'layout-grid-add', route: '/dashboard' },
 
-  {
-    navCap: 'User Management',
-  },
-  {
-    displayName: 'Users',
-    iconName: 'user',
-    route: '/dashboard/users',
-  },
-  {
-    navCap: 'Role Management',
-  },
-  {
-    displayName: 'Roles',
-    iconName: 'shield',
-    route: '/dashboard/roles',
-  },
+  { navCap: 'nav.userManagement' },
+  { displayName: 'nav.users', iconName: 'user', route: '/dashboard/users' },
+
+  { navCap: 'nav.roleManagement' },
+  { displayName: 'nav.roles', iconName: 'shield', route: '/dashboard/roles' },
 ];

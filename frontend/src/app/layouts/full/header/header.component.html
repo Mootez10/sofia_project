@@ -3,10 +3,23 @@
   <app-branding></app-branding>
 
   <!-- Mobile Menu -->
-  
+
   <button mat-icon-button (click)="toggleMobileNav.emit()" class="d-flex d-lg-none justify-content-center">
     <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
   </button>
+
+  <!-- Language icon + menu (Material UI only) -->
+  <button mat-icon-button [matMenuTriggerFor]="langMenu" aria-label="Change language">
+    <mat-icon>language</mat-icon> <!-- built-in Material globe icon -->
+  </button>
+
+  <mat-menu #langMenu="matMenu">
+    <button mat-menu-item *ngFor="let l of i18n.langs" (click)="i18n.use(l)">
+      <span class="me-2">{{ l | uppercase }}</span>
+      <mat-icon *ngIf="i18n.current === l">check</mat-icon>
+    </button>
+  </mat-menu>
+
 
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Notifications">
     <i-tabler class="d-flex" name="bell"></i-tabler>
@@ -27,11 +40,7 @@
     Check Pro Template
   </a> -->
   <button mat-mini-fab [matMenuTriggerFor]="profilemenu" aria-label="Notifications">
-<img
-  [src]="profileImage"
-  class="rounded-circle object-cover d-block"
-  width="35"
-/>
+    <img [src]="profileImage" class="rounded-circle object-cover d-block" width="35" />
 
 
 

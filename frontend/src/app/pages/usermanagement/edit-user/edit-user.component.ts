@@ -55,7 +55,6 @@ export class EditUserComponent implements OnInit {
       next: (res) => {
         this.roles = res || [];
 
-        // Ensure the user's current role is present even if it's not in the list (legacy values)
         if (this.user?.role && !this.roles.some(r => r.name === this.user.role)) {
           this.roles.push({ name: this.user.role });
         }
@@ -65,7 +64,6 @@ export class EditUserComponent implements OnInit {
       error: (err) => {
         console.error('Failed to load roles:', err);
         this.rolesError = 'Failed to load roles. Showing basic roles.';
-        // Fallback so the select isn’t empty
         const fallback = [{ name: 'admin' }, { name: 'user' }];
         this.roles = [...fallback];
 

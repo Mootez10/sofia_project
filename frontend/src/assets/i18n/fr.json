@@ -1,0 +1,38 @@
+{
+  "auth": {
+    "signInWithGoogle": "Se connecter avec Google",
+    "signInWithFacebook": "Se connecter avec Facebook",
+    "orSignInWith": "ou connectez-vous avec",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "rememberThisDevice": "Se souvenir de cet appareil",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "loginSuccess": "Connexion réussie. Bon retour !",
+    "errors": {
+      "requiredEmailPassword": "L’e-mail et le mot de passe sont requis.",
+      "loginFailed": "Échec de la connexion. Veuillez réessayer."
+    },
+
+  
+  "nav": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "userManagement": "Gestion des utilisateurs",
+    "users": "Utilisateurs",
+    "roleManagement": "Gestion des rôles",
+    "roles": "Rôles"
+  },
+  "sidebar": {
+    "user": "Utilisateur",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "disableNotifications": "Désactiver les notifications",
+    "signOut": "Se déconnecter"
+  }
+}
+
+  }
+

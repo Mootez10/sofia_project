@@ -5,11 +5,12 @@ import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-side-login',
   standalone: true,
-  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, CommonModule, TranslateModule],
   templateUrl: './side-login.component.html',
 })
 export class AppSideLoginComponent {
@@ -18,37 +19,32 @@ export class AppSideLoginComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private notify: NotificationService
+    private notify: NotificationService,
+    private translate: TranslateService   // ⬅️ inject to translate TS strings
   ) {}
 
   onLogin() {
     const { email, password } = this.loginData;
 
     if (!email || !password) {
-      this.notify.loginFailed('Email and password are required.');
+      this.notify.loginFailed(this.translate.instant('auth.errors.requiredEmailPassword'));
       return;
     }
 
     this.authService.signin(email, password).subscribe({
       next: (response) => {
-        // Save token (your AuthService doesn't store it automatically)
         localStorage.setItem('token', response.token);
+        this.notify.success(this.translate.instant('auth.loginSuccess'));
 
-        // Optional: show success before redirect
-        this.notify.loginSuccess();
-
-        // Ask API for where to go next, fallback to /profile
         this.authService.getRedirectPath().subscribe({
-          next: (res) => {
-            setTimeout(() => this.router.navigate([res.path]), 1200);
-          },
-          error: () => {
-            setTimeout(() => this.router.navigate(['/profile']), 1200);
-          },
+          next: (res) => setTimeout(() => this.router.navigate([res.path]), 1200),
+          error: () => setTimeout(() => this.router.navigate(['/profile']), 1200),
         });
       },
       error: (err) => {
-        this.notify.loginFailed(err?.error?.message || 'Login failed. Please try again.');
+        this.notify.loginFailed(
+          err?.error?.message || this.translate.instant('auth.errors.loginFailed')
+        );
       },
     });
   }

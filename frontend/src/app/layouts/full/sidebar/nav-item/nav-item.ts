@@ -8,4 +8,6 @@ export interface NavItem {
     chipContent?: string;
     chipClass?: string;
     external?: boolean;
+    disabled?: boolean;
+    
 }

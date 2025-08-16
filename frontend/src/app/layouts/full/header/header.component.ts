@@ -15,6 +15,7 @@ import { BrandingComponent } from '../sidebar/branding.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { I18nService } from 'src/app/services/i18n/i18n.service';
 
 @Component({
   selector: 'app-header',
@@ -27,6 +28,7 @@ import { environment } from 'src/environments/environment';
     BrandingComponent
   ],
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit {
@@ -37,7 +39,7 @@ export class HeaderComponent implements OnInit {
 
   environmentUrl = environment.apiUrl;
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient , public i18n: I18nService) {}
 
   ngOnInit() {
   this.http.get(environment.apiUrl + '/api/users/profile').subscribe({
