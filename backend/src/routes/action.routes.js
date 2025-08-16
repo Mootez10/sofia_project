@@ -8,9 +8,9 @@ router.get('/', async (req, res) => {
     const actions = await Action.find();
     res.json(actions);
   } catch (err) {
-    console.error('Error fetching actions:', err);
     res.status(500).json({ message: 'Server error while fetching actions.' });
   }
 });
 
+module.exports = router;
 module.exports = router;

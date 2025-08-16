@@ -1,16 +1,17 @@
 // services/user.service.js
 const User = require('../models/User.model');
+const MSG = require('../constants/messages');
 
 async function createUser({ name, email, password, role, description, picture }) {
   // Validate required fields (controller already validates, but double-check here)
   if (!name || !email || !password) {
-    throw new Error('Name, email, and password are required.');
+    throw new Error(MSG.NAME_EMAIL_PASSWORD_REQUIRED);
   }
 
   // Unique by email
   const exists = await User.findOne({ email });
   if (exists) {
-    throw new Error('Email already in use');
+    throw new Error(MSG.EMAIL_ALREADY_USED);
   }
 
   // Create user (password is already hashed by controller)

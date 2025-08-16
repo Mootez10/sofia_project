@@ -1,4 +1,5 @@
 const User = require('../models/User.model');
+const MSG = require('../constants/messages');
 
 /**
  * Determines redirection path based on user role
@@ -9,7 +10,7 @@ const User = require('../models/User.model');
 const getRedirectPath = async (userId) => {
   const user = await User.findById(userId);
   if (!user) {
-    throw new Error('User not found');
+    throw new Error(MSG.USER_NOT_FOUND);
   }
 
   return user.role === 'admin' ? '/dashboard' : '/profile';

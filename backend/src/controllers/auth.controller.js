@@ -1,4 +1,5 @@
 const { registerUser, loginUser } = require('../services/auth.service');
+const MSG = require('../constants/messages');
 
 // ✅ Handle user registration
 // ✅ Handle user registration
@@ -9,9 +10,8 @@ exports.register = async (req, res) => {
 
     const user = await registerUser({ name, email, password, picture, roleName }); // ⬅️ pass roleName
 
-    res.status(201).json({ message: 'User registered successfully', user });
+    res.status(201).json({ message: MSG.USER_REGISTERED_SUCCESS, user });
   } catch (error) {
-    console.error('Signup error:', error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -25,13 +25,12 @@ exports.login = async (req, res) => {
     const result = await loginUser({ email, password });
 
     if (!result || !result.token) {
-      return res.status(400).json({ message: 'Invalid login response' });
+      return res.status(400).json({ message: MSG.INVALID_LOGIN_RESPONSE });
     }
 
     // ✅ ONLY token
     return res.json({ token: result.token });
   } catch (error) {
-    console.error('Login error:', error);
     return res.status(400).json({ message: error.message });
   }
 };

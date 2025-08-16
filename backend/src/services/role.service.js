@@ -1,13 +1,14 @@
 // services/role.service.js
-const mongoose = require('mongoose');             // ✅ ADD THIS LINE
+const mongoose = require('mongoose');
 const Role = require('../models/role.model');
 const Action = require('../models/action.model');
 const RoleAction = require('../models/role_action.model');
+const MSG = require('../constants/messages');
 
 // ✅ Create a role
 exports.createRole = async (data) => {
   const exists = await Role.findOne({ name: data.name });
-  if (exists) throw new Error('Role already exists');
+  if (exists) throw new Error(MSG.ROLE_ALREADY_EXISTS);
 
   const role = new Role({
     name: data.name,
@@ -41,7 +42,7 @@ exports.createRoleWithActions = async (roleName, description, actionIds = []) =>
   try {
     await session.withTransaction(async () => {
       const exists = await Role.findOne({ name: roleName }).session(session);
-      if (exists) throw new Error('Role already exists');
+      if (exists) throw new Error(MSG.ROLE_ALREADY_EXISTS);
 
       const role = await Role.create([{ name: roleName, description }], { session });
       const createdRole = role[0];
@@ -50,7 +51,7 @@ exports.createRoleWithActions = async (roleName, description, actionIds = []) =>
       const ids = actionIds.map(id => new mongoose.Types.ObjectId(id));
       const validActions = await Action.find({ _id: { $in: ids } }).session(session);
       if (validActions.length !== ids.length) {
-        throw new Error('One or more actions are invalid');
+        throw new Error(MSG.FAILED_TO_LOAD_ACTIONS);
       }
 
       // Link RoleAction docs
@@ -75,7 +76,7 @@ exports.createRoleWithActions = async (roleName, description, actionIds = []) =>
 // ✅ Fetch role + actions via RoleAction; fallback to Role.actions (names)
 exports.getRoleWithActionsById = async (roleId) => {
   const role = await Role.findById(roleId);
-  if (!role) throw new Error('Role not found');
+  if (!role) throw new Error(MSG.ROLE_NOT_FOUND);
 
   const roleActions = await RoleAction.find({ roleId }).populate('actionId');
   let actions = roleActions.map(ra => ra.actionId).filter(Boolean);

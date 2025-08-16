@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+const MSG = require('../constants/messages');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -19,7 +20,7 @@ const upload = multer({
     const mimetype = filetypes.test(file.mimetype);
 
     if (mimetype && extname) return cb(null, true);
-    cb(new Error('Only images are allowed'));
+    cb(new Error(MSG.FAILED_TO_LOAD_ACTIONS));
   }
 });
 

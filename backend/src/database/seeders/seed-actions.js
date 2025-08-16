@@ -20,24 +20,20 @@ const actions = [
 async function seedActions() {
   try {
     await mongoose.connect(MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
 
     for (const action of actions) {
       const exists = await Action.findOne({ name: action.name });
       if (!exists) {
         await Action.create(action);
-        console.log(`✅ Action added: ${action.name}`);
-      } else {
-        console.log(`ℹ️ Action already exists: ${action.name}`);
-      }
+      } 
     }
 
-    console.log('✅ Action seeding complete!');
     process.exit();
   } catch (err) {
-    console.error('❌ Seeding error:', err);
     process.exit(1);
   }
 }
+  
+
 
 seedActions();

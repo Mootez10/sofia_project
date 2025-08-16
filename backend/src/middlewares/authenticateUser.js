@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const MSG = require('../constants/messages');
 
 const authenticateUser = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -6,7 +7,7 @@ const authenticateUser = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ message: 'No token provided, authorization denied' });
+    return res.status(401).json({ message: MSG.NO_TOKEN });
   }
 
   try {
@@ -14,9 +15,8 @@ const authenticateUser = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    return res.status(403).json({ message: MSG.INVALID_TOKEN });
   }
 };
-
 
 module.exports = authenticateUser;

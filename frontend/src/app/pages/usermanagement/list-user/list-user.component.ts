@@ -43,7 +43,6 @@ export class ListUserComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = localStorage.getItem('userRole');
     this.loadUsers();
-    console.log("from decode",this.authService.getCurrentUserFromToken())
     setTimeout(() => {
       const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
       tooltipTriggerList.forEach((el) => new Tooltip(el));

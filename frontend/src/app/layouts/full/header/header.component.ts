@@ -45,10 +45,8 @@ export class HeaderComponent implements OnInit {
   this.http.get(environment.apiUrl + '/api/users/profile').subscribe({
     next: (res: any) => {
       this.userData = res.user;
-      console.log('User data loaded in header:', this.userData);
     },
     error: () => {
-      console.error('Failed to load user data');
     }
   });
 }

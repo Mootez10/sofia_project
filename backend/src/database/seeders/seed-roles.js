@@ -10,22 +10,17 @@ const MONGODB_URI = process.env.mongodb_URL;
 async function seedRoles() {
   try {
     await mongoose.connect(MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
 
-    // 🧹 Clear existing roles
     await Role.deleteMany({});
-    console.log('🧹 Cleared roles collection');
 
-    // 🧠 Get all available actions from the DB
     const allActions = await Action.find({});
     const allActionNames = allActions.map(action => action.name);
 
-    // ✅ Create roles
     const roles = [
       {
         name: 'admin',
         description: 'Full access to all features',
-        actions: allActionNames // ✅ all actions assigned
+        actions: allActionNames
       },
       {
         name: 'developer',
@@ -40,10 +35,8 @@ async function seedRoles() {
     ];
 
     await Role.insertMany(roles);
-    console.log('✅ Seeded roles: admin, developer, user');
     process.exit();
   } catch (err) {
-    console.error('❌ Seeding failed:', err);
     process.exit(1);
   }
 }

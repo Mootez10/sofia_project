@@ -1,6 +1,7 @@
-const bcrypt = require('bcrypt'); // ✅ You were missing this
+const bcrypt = require('bcrypt');
 const userService = require('../services/user.service');
 const User = require('../models/User.model');
+const MSG = require('../constants/messages');
 
 // ✅ Create a new user
 // Route: POST /api/users/add
@@ -11,7 +12,7 @@ exports.createUser = async (req, res) => {
     const picture = req.file ? `/api/uploads/${req.file.filename}` : null;
 
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Name, email, and password are required.' });
+      return res.status(400).json({ message: MSG.NAME_EMAIL_PASSWORD_REQUIRED });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,25 +26,22 @@ exports.createUser = async (req, res) => {
       picture,
     });
 
-    return res.status(201).json({ message: 'User created successfully', user });
+    return res.status(201).json({ message: MSG.USER_CREATED_SUCCESS, user });
   } catch (err) {
-    // 👇 show the real reason in server logs
-    console.error('Create user error:', err.stack || err);
-
     // duplicate key (email already exists)
     if (err && (err.code === 11000 || err.message?.includes('duplicate key'))) {
-      return res.status(400).json({ message: 'Email already in use' });
+      return res.status(400).json({ message: MSG.EMAIL_ALREADY_USED });
     }
     // mongoose validation errors
     if (err?.name === 'ValidationError') {
       return res.status(400).json({ message: err.message });
     }
     // our own thrown messages
-    if (err?.message === 'Email already in use' || err?.message === 'Name, email, and password are required.') {
+    if (err?.message === MSG.EMAIL_ALREADY_USED || err?.message === MSG.NAME_EMAIL_PASSWORD_REQUIRED) {
       return res.status(400).json({ message: err.message });
     }
 
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
 
@@ -53,8 +51,7 @@ exports.getUsers = async (_req, res) => {
     const users = await userService.getAllUsers();
     return res.json(users);
   } catch (error) {
-    console.error('Get users error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
 
@@ -62,11 +59,10 @@ exports.getUsers = async (_req, res) => {
 exports.getUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
     return res.json(user);
   } catch (error) {
-    console.error('Get user error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
 
@@ -88,12 +84,11 @@ exports.updateUser = async (req, res) => {
     if (req.file) updatedFields.picture = `/api/uploads/${req.file.filename}`;
 
     const updatedUser = await userService.updateUser(userId, updatedFields);
-    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+    if (!updatedUser) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
 
-    return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+    return res.status(200).json({ message: MSG.USER_UPDATED_SUCCESS, user: updatedUser });
   } catch (error) {
-    console.error('Update user error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
 
@@ -101,11 +96,10 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const deletedUser = await userService.deleteUser(req.params.id);
-    if (!deletedUser) return res.status(404).json({ message: 'User not found' });
-    return res.json({ message: 'User deleted successfully' });
+    if (!deletedUser) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
+    return res.json({ message: MSG.USER_DELETED_SUCCESS });
   } catch (error) {
-    console.error('Delete user error:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
 
@@ -114,10 +108,9 @@ exports.getUserProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await User.findById(userId).select('-password');
-    if (!user) return res.status(404).json({ message: 'User Not Found' });
+    if (!user) return res.status(404).json({ message: MSG.USER_NOT_FOUND });
     return res.status(200).json({ user });
   } catch (error) {
-    console.error('Error fetching profile', error);
-    return res.status(500).json({ message: 'Server Error' });
+    return res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
