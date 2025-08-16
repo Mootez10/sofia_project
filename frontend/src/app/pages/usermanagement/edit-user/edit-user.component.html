@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Edit User</h2>
+<h2 mat-dialog-title>{{ 'userManagement.editUser' | translate }}</h2>
 
 <mat-dialog-content>
   <!-- Picture -->
@@ -11,38 +11,32 @@
     />
   </div>
 
-  <!-- Name -->
-  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">Name</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">{{ 'userManagement.name' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [(ngModel)]="user.name" name="name" required />
   </mat-form-field>
 
-  <!-- Email -->
-  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">Email Address</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">{{ 'userManagement.email' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [(ngModel)]="user.email" name="email" required type="email" />
   </mat-form-field>
 
-   <!-- Password -->
-  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">Password</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">{{ 'userManagement.role' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
-  <mat-select [(ngModel)]="user.role" name="role" required (selectionChange)="setDescriptionBasedOnRole()">
-    <mat-option *ngIf="loadingRoles" [disabled]="true">Loading roles…</mat-option>
-    <mat-option *ngFor="let r of roles" [value]="r.name">
-      {{ r.name }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+    <mat-select [(ngModel)]="user.role" name="role" required (selectionChange)="setDescriptionBasedOnRole()">
+      <mat-option *ngIf="loadingRoles" [disabled]="true">{{ 'userManagement.loadingRoles' | translate }}</mat-option>
+      <mat-option *ngFor="let r of roles" [value]="r.name">
+        {{ r.name | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-
-  <!-- Description -->
-  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">Description</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">{{ 'userManagement.description' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [(ngModel)]="user.description" name="description" />
   </mat-form-field>
 
-  <!-- Picture Upload -->
-  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">Change Picture</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-5 d-block">{{ 'userManagement.changePicture' | translate }}</mat-label>
   <input
     class="form-control form-control-sm mt-2"
     type="file"
@@ -52,6 +46,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close mat-raised-button>Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Update</button>
+  <button mat-button mat-dialog-close mat-raised-button>{{ 'userManagement.cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="submit()">{{ 'userManagement.update' | translate }}</button>
 </mat-dialog-actions>
+

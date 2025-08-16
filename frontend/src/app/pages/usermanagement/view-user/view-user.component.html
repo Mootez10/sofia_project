@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>User Details</h2>
+<h2 mat-dialog-title>{{ 'userManagement.userDetails' | translate }}</h2>
 <mat-dialog-content>
 
    <!-- Picture -->
@@ -10,33 +10,29 @@
       width="50"
     />
   </div>
-  <!-- Name -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">{{ 'userManagement.name' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [(ngModel)]="data.user.name" name="name" [readonly]="true" />
   </mat-form-field>
 
-  <!-- Email -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email Address</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">{{ 'userManagement.email' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [(ngModel)]="data.user.email" name="email" [readonly]="true" />
   </mat-form-field>
 
-  <!-- Role -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Role</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">{{ 'userManagement.role' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [(ngModel)]="data.user.role" name="role" [readonly]="true" />
   </mat-form-field>
 
-  <!-- Description -->
-  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Description</mat-label>
+  <mat-label class="f-s-14 f-w-600 m-b-12 d-block">{{ 'userManagement.description' | translate }}</mat-label>
   <mat-form-field appearance="outline" class="w-100">
     <input matInput [value]="data.user.description" readonly />
   </mat-form-field>
 
- 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
+  <button mat-button mat-dialog-close mat-raised-button color="primary">{{ 'userManagement.close' | translate }}</button>
 </mat-dialog-actions>
+

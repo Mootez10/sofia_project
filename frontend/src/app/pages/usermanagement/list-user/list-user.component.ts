@@ -14,17 +14,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
-
-
-
-
+import { TranslateModule } from '@ngx-translate/core';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-list-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, MatSnackBarModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatSnackBarModule, TranslateModule],
   templateUrl: './list-user.component.html',
   styleUrl: './list-user.component.scss',
 })

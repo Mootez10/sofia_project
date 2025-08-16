@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ChangeDetectorRef } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-user',
@@ -26,6 +27,7 @@ import { ChangeDetectorRef } from '@angular/core';
     MatSelectModule,
     MatButtonModule,
     MatOptionModule,
+    TranslateModule
   ]
 })
 export class AddUserComponent implements OnInit {

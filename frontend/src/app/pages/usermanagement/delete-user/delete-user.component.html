@@ -6,13 +6,16 @@
   <div class="danger-icon"><span>!</span></div>
 
   <!-- Message -->
-  <p class="confirm-text">Are you sure you want to delete this user ?</p>
+  <p class="confirm-text">{{ 'userManagement.confirmDelete' | translate }}</p>
 
   <!-- Actions -->
   <div class="actions">
-    <!-- make it warn + force red via CSS vars -->
-    <button mat-raised-button color="warn" class="btn-yes" (click)="confirmDelete()">Yes, I'm sure</button>
-    <button mat-stroked-button class="btn-no" (click)="cancel()">No, cancel</button>
+    <button mat-raised-button color="warn" class="btn-yes" (click)="confirmDelete()">
+      {{ 'userManagement.confirmYes' | translate }}
+    </button>
+    <button mat-stroked-button class="btn-no" (click)="cancel()">
+      {{ 'userManagement.confirmNo' | translate }}
+    </button>
   </div>
 
   <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>

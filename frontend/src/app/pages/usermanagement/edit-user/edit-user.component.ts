@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-user',
@@ -23,7 +24,8 @@ import { environment } from 'src/environments/environment';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatOptionModule
+    MatOptionModule,
+    TranslateModule
   ]
 })
 export class EditUserComponent implements OnInit {

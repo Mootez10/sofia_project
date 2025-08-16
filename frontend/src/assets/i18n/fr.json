@@ -14,9 +14,8 @@
     "errors": {
       "requiredEmailPassword": "L’e-mail et le mot de passe sont requis.",
       "loginFailed": "Échec de la connexion. Veuillez réessayer."
-    },
-
-  
+    }
+  },
   "nav": {
     "home": "Accueil",
     "dashboard": "Tableau de bord",
@@ -31,8 +30,39 @@
     "profile": "Profil",
     "disableNotifications": "Désactiver les notifications",
     "signOut": "Se déconnecter"
+  },
+  "userManagement": {
+    "title": "Gestion des utilisateurs",
+    "addUser": "Ajouter un utilisateur",
+    "editUser": "Modifier l'utilisateur",
+    "deleteUser": "Supprimer l'utilisateur",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
+    "confirmYes": "Oui, je confirme",
+    "confirmNo": "Non, annuler",
+    "userDetails": "Détails de l'utilisateur",
+    "userList": "Liste des utilisateurs",
+    "name": "Nom",
+    "email": "Adresse e-mail",
+    "emailTaken": "Désolé, cet e-mail est déjà utilisé. Essayez-en un autre ?",
+    "password": "Mot de passe",
+    "role": "Rôle",
+    "description": "Description",
+    "picture": "Photo",
+    "changePicture": "Changer la photo",
+    "actions": "Actions",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "signUp": "S'inscrire",
+    "update": "Mettre à jour",
+    "view": "Voir",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "loadingRoles": "Chargement des rôles…",
+    "successAdd": "Utilisateur ajouté avec succès.",
+    "successEdit": "Utilisateur modifié avec succès.",
+    "successDelete": "Utilisateur supprimé avec succès.",
+    "error": "Une erreur est survenue. Veuillez réessayer."
   }
 }
-
-  }
 

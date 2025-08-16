@@ -3,9 +3,9 @@
 
   <!-- Create User Button -->
   <div class="d-flex justify-content-end mb-3">
-   <button class="btn btn-outline-primary" mat-raised-button (click)="openCreateDialog()" [disabled]="userRole === 'developer'">Create User</button>
-
-
+   <button class="btn btn-outline-primary" mat-raised-button (click)="openCreateDialog()" [disabled]="userRole === 'developer'">
+     {{ 'userManagement.addUser' | translate }}
+   </button>
   </div>
 
   <!-- Users Grid -->
@@ -25,29 +25,29 @@
           <p class="card-text text-muted">{{ user.email }}</p>
 
           <!-- Role -->
-          <p class="card-text text-info fw-bold">{{ user.role }}</p>
+          <p class="card-text text-info fw-bold">{{ user.role | translate }}</p>
 
           <!-- Action Buttons -->
           <div class="d-flex justify-content-around mt-3 action-icons-group">
             <div class="text-center">
-              <button class="btn btn-link text-primary p-0" (click)="viewUser(user)" title="View">
+              <button class="btn btn-link text-primary p-0" (click)="viewUser(user)" title="{{ 'userManagement.view' | translate }}">
                 <i class="ti ti-eye fs-4"></i>
               </button>
-              <div class="icon-label">View</div>
+              <div class="icon-label">{{ 'userManagement.view' | translate }}</div>
             </div>
 
             <div class="text-center">
-              <button class="btn btn-link text-warning p-0" (click)="editUser(user)" title="Edit" [disabled]="userRole === 'developer'">
+              <button class="btn btn-link text-warning p-0" (click)="editUser(user)" title="{{ 'userManagement.edit' | translate }}" [disabled]="userRole === 'developer'">
                 <i class="ti ti-pencil fs-4"></i>
               </button>
-              <div class="icon-label">Edit</div>
+              <div class="icon-label">{{ 'userManagement.edit' | translate }}</div>
             </div>
 
             <div class="text-center">
-              <button class="btn btn-link text-danger p-0" (click)="deleteUser(user)" title="Delete" [disabled]="userRole === 'developer'">
+              <button class="btn btn-link text-danger p-0" (click)="deleteUser(user)" title="{{ 'userManagement.delete' | translate }}" [disabled]="userRole === 'developer'">
                 <i class="ti ti-trash fs-4"></i>
               </button>
-              <div class="icon-label">Delete</div>
+              <div class="icon-label">{{ 'userManagement.delete' | translate }}</div>
             </div>
           </div>
 

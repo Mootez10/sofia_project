@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ModalService } from 'src/app/services/modal/modal.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-delete-user',
   standalone: true,
   templateUrl: './delete-user.component.html',
   styleUrls: ['./delete-user.component.scss'],
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, TranslateModule],
 })
 export class DeleteUserComponent {
   errorMessage = '';
