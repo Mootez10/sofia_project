@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 dotenv.config();
 
-const Role = require('../../models/role.model');
-const Action = require('../../models/action.model');
+const Action = require("../../models/action.model");
+const Role = require("../../models/role.model");
 
 const MONGODB_URI = process.env.mongodb_URL;
 
@@ -14,31 +14,31 @@ async function seedRoles() {
     await Role.deleteMany({});
 
     const allActions = await Action.find({});
-    const allActionNames = allActions.map(action => action.name);
+    const allActionNames = allActions.map((action) => action.name);
 
     const roles = [
       {
-        name: 'admin',
-        description: 'Full access to all features',
-        actions: allActionNames
+        name: "admin",
+        description: "Full access to all features",
+        actions: allActionNames,
       },
       {
-        name: 'developer',
-        description: 'Developer role with limited management rights',
-        actions: ['add-user', 'view-user', 'role-management']
+        name: "developer",
+        description: "Developer role with limited management rights",
+        actions: ["add-user", "view-user", "role-management"],
       },
       {
-        name: 'user',
-        description: 'Basic user role with dashboard access only',
-        actions: ['dashboard']
-      }
+        name: "user",
+        description: "Basic user role with dashboard access only",
+        actions: ["dashboard"],
+      },
     ];
 
     await Role.insertMany(roles);
     process.exit();
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('seedRoles error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("seedRoles error:", err);
     }
     process.exit(1);
   }

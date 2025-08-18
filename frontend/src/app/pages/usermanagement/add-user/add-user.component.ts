@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ChangeDetectorRef } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { MESSAGES } from 'src/constants/messages';
 
 @Component({
   selector: 'app-add-user',
@@ -32,7 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class AddUserComponent implements OnInit {
   // ✅ CHANGED: Using standard camelCase properties
-  user: any = {
+  user: { name: string; email: string; password: string; role: string; description: string } = {
     name: '',
     email: '',
     password: '',
@@ -40,24 +41,22 @@ export class AddUserComponent implements OnInit {
     description: '',
   };
 
-  roles: any[] = [];
+  roles: { name: string }[] = [];
   selectedFile: File | null = null;
   message = '';
   emailTaken = false;
 
-  constructor(
-    private dialogRef: MatDialogRef<AddUserComponent>,
-    private http: HttpClient,
-    private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private dialogRef = inject(MatDialogRef<AddUserComponent>);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.loadRoles();
   }
 
   loadRoles(): void {
-    this.http.get<any[]>(`${environment.apiUrl}/api/roles`).subscribe({
+    this.http.get<{ name: string }[]>(`${environment.apiUrl}/api/roles`).subscribe({
       next: (res) => {
         this.roles = res;
         if (this.roles.length) {
@@ -67,7 +66,7 @@ export class AddUserComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Failed to load roles:', err);
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
       }
     });
   }
@@ -90,8 +89,9 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] || null;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] || null;
   }
 
   submit(): void {
@@ -109,13 +109,13 @@ export class AddUserComponent implements OnInit {
 
     this.http.post(`${environment.apiUrl}/api/users/add`, formData).subscribe({
       next: () => {
-        this.message = 'Création réussie !';
+        this.message = MESSAGES.USER_CREATED_SUCCESS;
         this.emailTaken = false;
         this.dialogRef.close('refresh');
         this.router.navigate(['/dashboard/users']);
       },
       error: (err) => {
-        console.error(err);
+        console.error(MESSAGES.FAILED_TO_CREATE_ROLE, err);
         if (
           err.status === 400 &&
           err.error?.message?.toLowerCase().includes('email already')
@@ -123,7 +123,7 @@ export class AddUserComponent implements OnInit {
           this.emailTaken = true;
           this.cdr.detectChanges();
         } else {
-          this.message = 'Erreur lors de la création.';
+          this.message = MESSAGES.FAILED_TO_CREATE_ROLE;
         }
       }
     });

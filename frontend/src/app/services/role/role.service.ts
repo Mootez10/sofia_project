@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -7,8 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class RoleService {
   private baseUrl = `${environment.apiUrl}/api/roles`;
-
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   createRole(role: { name: string; description: string; actions: string[] }) {
     return this.http.post(this.baseUrl, role);
@@ -43,7 +42,7 @@ export class RoleService {
  * */
 
   getRoleWithActions(id: string) {
-  return this.http.get(`${environment.apiUrl}/api/roles/${id}/actions`);
+    return this.http.get(`${environment.apiUrl}/api/roles/${id}/actions`);
+  }
 }
 
-}

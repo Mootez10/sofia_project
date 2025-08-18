@@ -5,6 +5,7 @@ import {
   OnChanges,
   Output,
   EventEmitter,
+  inject
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -40,7 +41,9 @@ export class AppNavItemComponent implements OnChanges {
   expanded = false;
   @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
 
-  constructor(public navService: NavService, public router: Router , private translateservice: TranslateService) {}
+  public navService = inject(NavService);
+  public router = inject(Router);
+  private translateservice = inject(TranslateService);
 
   ngOnChanges() {
     const url = this.navService.currentUrl?.() ?? this.router.url;

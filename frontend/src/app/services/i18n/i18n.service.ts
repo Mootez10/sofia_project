@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 
@@ -6,10 +6,10 @@ const RTL = new Set(['ar']); // add rtl languages here if you add Arabic, etc.
 
 @Injectable({ providedIn: 'root' })
 export class I18nService {
-  constructor(
-    private translate: TranslateService,
-    @Inject(DOCUMENT) private doc: Document
-  ) {
+  private translate = inject(TranslateService);
+  private doc = inject(DOCUMENT);
+
+  constructor() {
     this.translate.addLangs(['en', 'fr']);
     this.translate.setDefaultLang('fr');
 

@@ -1,11 +1,13 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
 dotenv.config();
 
-mongoose.connect(process.env.mongodb_URL).then(()=>{
-}).catch((err)=>{
-  if (process.env.NODE_ENV === 'development') {
-    console.error('MongoDB connection error:', err);
-  }
-});
+mongoose
+  .connect(process.env.mongodb_URL)
+  .then(() => {})
+  .catch((err) => {
+    if (process.env.NODE_ENV === "development") {
+      console.error("MongoDB connection error:", err);
+    }
+  });

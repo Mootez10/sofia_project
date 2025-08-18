@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
@@ -16,12 +16,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class AppSideLoginComponent {
   loginData = { email: '', password: '' };
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private notify: NotificationService,
-    private translate: TranslateService   // ⬅️ inject to translate TS strings
-  ) {}
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private notify = inject(NotificationService);
+  private translate = inject(TranslateService);   // ⬅️ inject to translate TS strings
 
   onLogin() {
     const { email, password } = this.loginData;

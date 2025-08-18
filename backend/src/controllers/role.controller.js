@@ -1,5 +1,5 @@
-const roleService = require('../services/role.service');
-const MSG = require('../constants/messages');
+const MSG = require("../constants/messages");
+const roleService = require("../services/role.service");
 
 // ✅ Create new role
 exports.createRole = async (req, res) => {
@@ -7,8 +7,8 @@ exports.createRole = async (req, res) => {
     const role = await roleService.createRole(req.body);
     res.status(201).json({ message: MSG.ROLE_CREATED_SUCCESS, role });
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('createRole error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("createRole error:", err);
     }
     if (err.message === MSG.ROLE_ALREADY_EXISTS) {
       return res.status(409).json({ message: err.message });
@@ -17,16 +17,14 @@ exports.createRole = async (req, res) => {
   }
 };
 
-
-
 // ✅ Get all roles
 exports.getRoles = async (req, res) => {
   try {
     const roles = await roleService.getAllRoles();
     res.json(roles);
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('getRoles error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("getRoles error:", err);
     }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
@@ -39,8 +37,8 @@ exports.getRole = async (req, res) => {
     if (!role) return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
     res.json(role);
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('getRole error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("getRole error:", err);
     }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
@@ -50,11 +48,12 @@ exports.getRole = async (req, res) => {
 exports.updateRole = async (req, res) => {
   try {
     const updatedRole = await roleService.updateRole(req.params.id, req.body);
-    if (!updatedRole) return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
+    if (!updatedRole)
+      return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
     res.json({ message: MSG.ROLE_UPDATED_SUCCESS, role: updatedRole });
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('updateRole error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("updateRole error:", err);
     }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
@@ -67,31 +66,30 @@ exports.deleteRole = async (req, res) => {
     if (!deleted) return res.status(404).json({ message: MSG.ROLE_NOT_FOUND });
     res.json({ message: MSG.ROLE_DELETED_SUCCESS });
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('deleteRole error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("deleteRole error:", err);
     }
     res.status(500).json({ message: MSG.SERVER_ERROR });
   }
 };
 
-
-
-
-
 // ✅ POST /api/roles/create-role-with-actions
 exports.createRoleWithActions = async (req, res) => {
   try {
     const { roleName, description, actionIds } = req.body; // actionIds: string[]
-    const result = await roleService.createRoleWithActions(roleName, description, actionIds || []);
+    const result = await roleService.createRoleWithActions(
+      roleName,
+      description,
+      actionIds || [],
+    );
     res.status(201).json(result);
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('createRoleWithActions error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("createRoleWithActions error:", err);
     }
     res.status(400).json({ message: err.message });
   }
 };
-
 
 // ✅ GET /api/roles/:id/actions
 exports.getRoleWithActions = async (req, res) => {
@@ -99,11 +97,10 @@ exports.getRoleWithActions = async (req, res) => {
     const result = await roleService.getRoleWithActionsById(req.params.id);
     res.json(result);
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('getRoleWithActions error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("getRoleWithActions error:", err);
     }
     const code = err.message === MSG.ROLE_NOT_FOUND ? 404 : 500;
     res.status(code).json({ message: err.message });
   }
-
 };

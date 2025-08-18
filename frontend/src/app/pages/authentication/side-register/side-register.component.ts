@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { CoreService } from 'src/app/services/core.service';
+import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification/notification.service';
+import { CoreService } from 'src/app/services/core.service';
 
 @Component({
   selector: 'app-side-register',
@@ -20,19 +20,17 @@ import { NotificationService } from 'src/app/services/notification/notification.
   templateUrl: './side-register.component.html',
 })
 export class AppSideRegisterComponent {
-  options = this.settings.getOptions();
+  options = inject(CoreService).getOptions();
   registerData = { name: '', email: '', password: '' };
   selectedFile: File | null = null;
 
-  constructor(
-    private settings: CoreService,
-    private router: Router,
-    private authService: AuthService,
-    private notify: NotificationService
-  ) {}
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private notify = inject(NotificationService);
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] || null;
   }
 
   onRegister() {

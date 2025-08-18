@@ -1,8 +1,18 @@
 // services/user.service.js
-const User = require('../models/User.model');
-const MSG = require('../constants/messages');
+const MSG = require("../constants/messages");
+const User = require("../models/User.model");
 
-async function createUser({ name, email, password, role, description, picture }) {
+// ✅ Create user
+// Input: { name, email, password, role, description, picture }
+// Output: user object (without password) or throws error
+async function createUser({
+  name,
+  email,
+  password,
+  role,
+  description,
+  picture,
+}) {
   try {
     // Validate required fields (controller already validates, but double-check here)
     if (!name || !email || !password) {
@@ -20,8 +30,8 @@ async function createUser({ name, email, password, role, description, picture })
       name,
       email,
       password,
-      role: role || 'user',
-      description: description || '',
+      role: role || "user",
+      description: description || "",
       picture: picture || null,
     });
 
@@ -30,62 +40,74 @@ async function createUser({ name, email, password, role, description, picture })
     delete obj.password;
     return obj;
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('createUser error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("createUser error:", err);
     }
     throw err;
   }
 }
 
+// ✅ Get all users
+// Input: none
+// Output: array of users (without password)
 async function getAllUsers() {
   try {
-    return User.find().select('-password');
+    return User.find().select("-password");
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('getAllUsers error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("getAllUsers error:", err);
     }
     throw err;
   }
 }
 
+// ✅ Get user by ID
+// Input: id
+// Output: user object (without password)
 async function getUserById(id) {
   try {
-    return User.findById(id).select('-password');
+    return User.findById(id).select("-password");
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('getUserById error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("getUserById error:", err);
     }
     throw err;
   }
 }
 
+// ✅ Update user
+// Input: id, fields
+// Output: updated user object (without password)
 async function updateUser(id, fields) {
   try {
     // If password is provided, ensure it is hashed (should be hashed in controller)
-    if (fields?.password && !fields.password.startsWith('$2b$')) {
-      throw new Error('Password must be hashed before updateUser');
+    if (fields?.password && !fields.password.startsWith("$2b$")) {
+      throw new Error("Password must be hashed before updateUser");
     }
 
     const user = await User.findByIdAndUpdate(id, fields, {
       new: true,
       runValidators: true,
-    }).select('-password');
+    }).select("-password");
 
     return user;
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('updateUser error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("updateUser error:", err);
     }
     throw err;
   }
 }
 
+// ✅ Delete user
+// Input: id
+// Output: deleted user object (without password)
 async function deleteUser(id) {
   try {
-    return User.findByIdAndDelete(id).select('-password');
+    return User.findByIdAndDelete(id).select("-password");
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('deleteUser error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("deleteUser error:", err);
     }
     throw err;
   }

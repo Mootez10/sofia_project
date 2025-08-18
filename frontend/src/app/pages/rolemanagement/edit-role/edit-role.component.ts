@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { RoleService } from '../../../services/role/role.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { MESSAGES } from 'src/constants/messages';
 
 @Component({
   selector: 'app-edit-role',
@@ -40,12 +41,14 @@ export class EditRoleComponent implements OnInit {
   errorMessage = '';
   loading = false;
 
-  constructor(
-    private dialogRef: MatDialogRef<EditRoleComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { role: any },
-    private http: HttpClient, // kept for fetchActions only
-    private roleService: RoleService // ✅ injected
-  ) {}
+  private dialogRef = inject(MatDialogRef<EditRoleComponent>);
+  private http = inject(HttpClient);
+  private roleService = inject(RoleService);
+  private data = inject(MAT_DIALOG_DATA) as { role: { _id: string; name: string; description: string; actions: string[] } };
+
+  constructor() {
+    this.role = { ...this.data.role };
+  }
 
   ngOnInit(): void {
     this.role = { ...this.data.role };
@@ -53,7 +56,7 @@ export class EditRoleComponent implements OnInit {
   }
 
   fetchActions(): void {
-    this.http.get<any[]>(`${environment.apiUrl}/api/actions`).subscribe({
+    this.http.get<{ name: string; path: string }[]>(`${environment.apiUrl}/api/actions`).subscribe({
       next: (res) => {
         const grouped: Record<string, string[]> = {};
 
@@ -75,8 +78,8 @@ export class EditRoleComponent implements OnInit {
         this.groupedActions = grouped;
       },
       error: (err) => {
-        console.error('❌ Failed to load actions:', err);
-        this.errorMessage = 'Failed to load actions.';
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
+        this.errorMessage = MESSAGES.FAILED_TO_LOAD_ACTIONS;
       }
     });
   }
@@ -96,12 +99,12 @@ export class EditRoleComponent implements OnInit {
 
   submit(): void {
     if (!this.role.name.trim()) {
-      this.errorMessage = 'Role name is required.';
+      this.errorMessage = MESSAGES.NAME_EMAIL_PASSWORD_REQUIRED;
       return;
     }
 
     if (this.role.actions.length === 0) {
-      this.errorMessage = 'At least one action must be selected.';
+      this.errorMessage = MESSAGES.FAILED_TO_LOAD_ACTIONS;
       return;
     }
 
@@ -115,8 +118,8 @@ export class EditRoleComponent implements OnInit {
     }).subscribe({
       next: () => this.dialogRef.close('refresh'),
       error: (err) => {
-        console.error('❌ Failed to update role:', err);
-        this.errorMessage = 'Failed to update role. Please try again.';
+        console.error(MESSAGES.FAILED_TO_UPDATE_ROLE, err);
+        this.errorMessage = MESSAGES.FAILED_TO_UPDATE_ROLE;
         this.loading = false;
       }
     });
@@ -126,3 +129,4 @@ export class EditRoleComponent implements OnInit {
     this.dialogRef.close();
   }
 }
+

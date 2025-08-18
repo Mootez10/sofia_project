@@ -10,6 +10,6 @@ import { TablerIconsModule } from 'angular-tabler-icons';
   imports: [MatCardModule, MatMenuModule, MatIconModule, TablerIconsModule, MatButtonModule],
   templateUrl: './menu.component.html',
 })
-export class AppMenuComponent {
-  constructor() {}
-}
+export class AppMenuComponent { }
+
+

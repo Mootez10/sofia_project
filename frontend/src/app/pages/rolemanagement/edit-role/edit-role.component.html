@@ -3,9 +3,9 @@
   <form>
 
     <!-- Name -->
-    <mat-label class="f-s-14 f-w-600 m-b-12 d-block">{{ 'roleManagement.name' | translate }}</mat-label>
+    <label for="roleNameEditInput" class="f-s-14 f-w-600 m-b-12 d-block">{{ 'roleManagement.name' | translate }}</label>
     <mat-form-field appearance="outline" class="w-100">
-      <input matInput [(ngModel)]="role.name" name="name" required />
+      <input matInput id="roleNameEditInput" [(ngModel)]="role.name" name="name" required />
     </mat-form-field>
 
     <!-- Description -->
@@ -16,7 +16,7 @@
 
     <!-- Actions -->
     <div class="mb-3">
-      <label class="fw-bold mb-2">{{ 'roleManagement.actions' | translate }}</label>
+      <label for="roleActionsEditInput" class="fw-bold mb-2">{{ 'roleManagement.actions' | translate }}</label>
 
       <ng-container *ngIf="groupedActions | keyvalue as groups; else loadingActions">
         <div *ngFor="let group of groups" class="mb-2">
@@ -24,6 +24,7 @@
 
           <div *ngFor="let action of group.value">
             <mat-checkbox
+              id="roleActionsEditInput"
               [checked]="isChecked(action)"
               (change)="toggleAction(action)"
               class="ms-2"

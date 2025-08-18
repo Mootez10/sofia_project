@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -36,7 +36,8 @@ export class ListRoleComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {}
+  private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.fetchRoles();
@@ -66,36 +67,36 @@ export class ListRoleComponent implements OnInit {
     });
   }
 
- viewRole(role: any): void {
-  this.dialog.open(ViewRoleComponent, {
-    width: '600px',
-    data: { role }
-  });
-}
+  viewRole(role: RoleElement): void {
+    this.dialog.open(ViewRoleComponent, {
+      width: '600px',
+      data: { role }
+    });
+  }
 
-  editRole(role: any): void {
-  const dialogRef = this.dialog.open(EditRoleComponent, {
-    width: '600px',
-    data: { role }
-  });
+  editRole(role: RoleElement): void {
+    const dialogRef = this.dialog.open(EditRoleComponent, {
+      width: '600px',
+      data: { role }
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result === 'refresh') {
-      this.fetchRoles();
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'refresh') {
+        this.fetchRoles();
+      }
+    });
+  }
 
-  deleteRole(role: any): void {
-  const dialogRef = this.dialog.open(DeleteRoleComponent, {
-    width: '400px',
-    data: { role }
-  });
+  deleteRole(role: RoleElement): void {
+    const dialogRef = this.dialog.open(DeleteRoleComponent, {
+      width: '400px',
+      data: { role }
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result === 'refresh') {
-      this.fetchRoles();
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'refresh') {
+        this.fetchRoles();
+      }
+    });
+  }
 }

@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Tooltip } from 'bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -9,14 +8,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { ViewUserComponent } from '../view-user/view-user.component';
 import { EditUserComponent } from '../edit-user/edit-user.component';
-import { DeleteUserComponent } from '../delete-user/delete-user.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { TranslateModule } from '@ngx-translate/core';
-
-declare const bootstrap: any;
+import { MESSAGES } from 'src/constants/messages';
 
 @Component({
   selector: 'app-list-user',
@@ -27,34 +24,34 @@ declare const bootstrap: any;
 })
 export class ListUserComponent implements OnInit {
   userRole: string | null = null;
-  users: any[] = [];
+  users: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string }[] = [];
   errorMessage = '';
-  newUser: any = {
+  newUser: { name: string; email: string; password: string; picture: File | null } = {
     name: '',
     email: '',
     password: '',
     picture: null,
   };
 
-  selectedUser: any = null;
+  selectedUser: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string } | null = null;
 
-  constructor(private http: HttpClient, private dialog: MatDialog, private snackBar: MatSnackBar, private authService : AuthService, private modalService: ModalService,) {}
+  private http = inject(HttpClient);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private authService = inject(AuthService);
+  private modalService = inject(ModalService);
 
   ngOnInit(): void {
     this.userRole = localStorage.getItem('userRole');
     this.loadUsers();
-    setTimeout(() => {
-      const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-      tooltipTriggerList.forEach((el) => new Tooltip(el));
-    });
   }
 
   loadUsers(): void {
-    this.http.get<any[]>(`${environment.apiUrl}/api/users`).subscribe({
+    this.http.get<{ _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string }[]>(`${environment.apiUrl}/api/users`).subscribe({
       next: (res) => (this.users = res),
       error: (err) => {
-        console.error('Failed to fetch users', err);
-        this.errorMessage = 'Could not load users.';
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
+        this.errorMessage = MESSAGES.FAILED_TO_LOAD_ACTIONS;
       },
     });
   }
@@ -75,8 +72,9 @@ export class ListUserComponent implements OnInit {
     return `${environment.apiUrl}${picturePath}`;
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (file) {
       this.newUser.picture = file;
     }
@@ -97,52 +95,51 @@ export class ListUserComponent implements OnInit {
         this.newUser = { name: '', email: '', password: '', picture: null };
       },
       error: (err) => {
-        console.error('User creation failed:', err);
+        console.error(MESSAGES.FAILED_TO_CREATE_ROLE, err);
       },
     });
   }
 
-  viewUser(user: any): void {
-  const userId = user.id || user._id;
-  if (!userId) {
-    console.error('User ID is missing:', user);
-    return;
+  viewUser(user: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string }): void {
+    const userId = user.id || user._id;
+    if (!userId) {
+      console.error('User ID is missing:', user);
+      return;
+    }
+
+    this.http.get(`${environment.apiUrl}/api/users/${userId}`).subscribe({
+      next: (user) => {
+        this.dialog.open(ViewUserComponent, {
+          width: '600px',
+          panelClass: 'custom-dialog-container',
+          data: { user }
+        });
+      },
+      error: (err) => {
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
+      }
+    });
   }
 
-  this.http.get(`${environment.apiUrl}/api/users/${userId}`).subscribe({
-    next: (user) => {
-      this.dialog.open(ViewUserComponent, {
-        width: '600px',
-        panelClass: 'custom-dialog-container',
-        data: { user }
-      });
-    },
-    error: (err) => {
-      console.error('Failed to load user:', err);
-    }
-  });
-}
+  editUser(user: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string }): void {
+    this.dialog.open(EditUserComponent, {
+      width: '600px',
+      panelClass: 'custom-dialog-container',
+      data: { user }
+    }).afterClosed().subscribe((result) => {
+      if (result === 'refresh') {
+        this.loadUsers();
+      }
+    });
+  }
 
-
-  editUser(user: any): void {
-  this.dialog.open(EditUserComponent, {
-    width: '600px',
-    panelClass: 'custom-dialog-container',
-    data: { user }
-  }).afterClosed().subscribe((result) => {
-    if (result === 'refresh') {
-      this.loadUsers();
-    }
-  });
+  deleteUser(user: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string }) {
+    this.modalService.openDeleteUser(user).afterClosed().subscribe(res => {
+      if (res === 'refresh') {
+        this.loadUsers(); // refresh your table
+      }
+    });
+  }
 }
-
-// In your users list component
-deleteUser(user: any) {
-  this.modalService.openDeleteUser(user).afterClosed().subscribe(res => {
-    if (res === 'refresh') {
-      this.loadUsers(); // refresh your table
-    }
-  });
-}
-}
+  
 

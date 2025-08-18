@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 
 @Component({
@@ -17,6 +17,6 @@ import { CoreService } from 'src/app/services/core.service';
   `,
 })
 export class BrandingComponent {
-  options = this.settings.getOptions();
-  constructor(private settings: CoreService) {}
+  options = inject(CoreService).getOptions();
 }
+

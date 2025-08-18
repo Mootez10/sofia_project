@@ -9,7 +9,9 @@
 @if (!item.navCap && !item.external) {
   <a
     mat-list-item
+    tabindex="0"
     (click)="onItemSelected(item)"
+    (keyup.enter)="onItemSelected(item)"
     [ngClass]="{
       activeMenu: item.route ? router.isActive(item.route, true) : false,
       expanded: expanded,

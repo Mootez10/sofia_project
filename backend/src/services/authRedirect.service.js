@@ -1,6 +1,9 @@
-const User = require('../models/User.model');
-const MSG = require('../constants/messages');
+const MSG = require("../constants/messages");
+const User = require("../models/User.model");
 
+// ✅ Get redirect path based on user role
+// Input: userId
+// Output: string path or throws error
 /**
  * Determines redirection path based on user role
  * @param {string} userId - The authenticated user's ID
@@ -14,10 +17,10 @@ const getRedirectPath = async (userId) => {
       throw new Error(MSG.USER_NOT_FOUND);
     }
 
-    return user.role === 'admin' ? '/dashboard' : '/profile';
+    return user.role === "admin" ? "/dashboard" : "/profile";
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('getRedirectPath error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("getRedirectPath error:", err);
     }
     throw err;
   }

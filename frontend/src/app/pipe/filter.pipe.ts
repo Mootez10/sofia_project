@@ -1,8 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+interface FilterableItem {
+  displayName: string;
+}
+
 @Pipe({ name: 'appFilter', standalone: true, pure: true })
 export class FilterPipe implements PipeTransform {
-  transform(items: any[], searchText: string): any[] {
+  transform(items: FilterableItem[], searchText: string): FilterableItem[] {
     if (!items) {
       return [];
     }

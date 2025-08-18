@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -11,8 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RoleService } from '../../../services/role/role.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
-
-
+import { MESSAGES } from 'src/constants/messages';
 
 @Component({
   selector: 'app-add-role',
@@ -31,7 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
 })
 export class AddRoleComponent implements OnInit {
-  currentUser: any;
+  currentUser: unknown;
   role = {
     name: '',
     description: '',
@@ -42,47 +41,43 @@ export class AddRoleComponent implements OnInit {
   loading = false;
   errorMessage = '';
 
-  constructor(
-    private dialogRef: MatDialogRef<AddRoleComponent>,
-    private http: HttpClient,
-    private roleService: RoleService,
-    private authService: AuthService
-  ) {}
+  private dialogRef = inject(MatDialogRef<AddRoleComponent>);
+  private http = inject(HttpClient);
+  private roleService = inject(RoleService);
+  private authService = inject(AuthService);
 
   ngOnInit(): void {
     this.fetchActions();
   }
 
- fetchActions(): void {
-  this.http.get<any[]>(`${environment.apiUrl}/api/actions`).subscribe({
-    next: (res) => {
-      const grouped: { [key: string]: string[] } = {};
+  fetchActions(): void {
+    this.http.get<{ name: string; path: string }[]>(`${environment.apiUrl}/api/actions`).subscribe({
+      next: (res) => {
+        const grouped: Record<string, string[]> = {};
 
-      for (const action of res) {
-  let group = 'Other';
+        for (const action of res) {
+          let group = 'Other';
 
-  if (action.path === '/dashboard') {
-    group = 'Dashboard';
-  } else if (action.path.startsWith('/dashboard/users')) {
-    group = 'User Management';
-  } else if (action.path.startsWith('/dashboard/roles')) {
-    group = 'Role Management';
+          if (action.path === '/dashboard') {
+            group = 'Dashboard';
+          } else if (action.path.startsWith('/dashboard/users')) {
+            group = 'User Management';
+          } else if (action.path.startsWith('/dashboard/roles')) {
+            group = 'Role Management';
+          }
+
+          if (!grouped[group]) grouped[group] = [];
+          grouped[group].push(action.name);
+        }
+
+        this.groupedActions = grouped;
+      },
+      error: (err) => {
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
+        this.errorMessage = MESSAGES.FAILED_TO_LOAD_ACTIONS;
+      }
+    });
   }
-
-  if (!grouped[group]) grouped[group] = [];
-  grouped[group].push(action.name);
-}
-
-      this.groupedActions = grouped;
-    },
-    error: (err) => {
-      console.error('❌ Failed to load actions:', err);
-      this.errorMessage = 'Failed to load actions.';
-    }
-  });
-}
-
-
 
   toggleAction(action: string): void {
     const index = this.role.actions.indexOf(action);
@@ -96,33 +91,35 @@ export class AddRoleComponent implements OnInit {
   }
 
   submit(): void {
-  if (!this.role.name.trim()) {
-    this.errorMessage = 'Role name is required.';
-    return;
-  }
-
-  if (this.role.actions.length === 0) {
-    this.errorMessage = 'At least one action must be selected.';
-    return;
-  }
-
-  this.loading = true;
-  this.errorMessage = '';
-
-  this.roleService.createRole(this.role).subscribe({
-    next: () => this.dialogRef.close('refresh'),
-    error: (err) => {
-      console.error('❌ Failed to create role:', err);
-      this.errorMessage =
-        err.status === 409
-          ? 'Role already exists.'
-          : 'Failed to create role. Please try again.';
-      this.loading = false;
+    if (!this.role.name.trim()) {
+      this.errorMessage = MESSAGES.NAME_EMAIL_PASSWORD_REQUIRED;
+      return;
     }
-  });
-}
+
+    if (this.role.actions.length === 0) {
+      this.errorMessage = MESSAGES.FAILED_TO_LOAD_ACTIONS;
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.roleService.createRole(this.role).subscribe({
+      next: () => this.dialogRef.close('refresh'),
+      error: (err) => {
+        console.error(MESSAGES.FAILED_TO_CREATE_ROLE, err);
+        this.errorMessage =
+          err.status === 409
+            ? MESSAGES.ROLE_ALREADY_EXISTS
+            : MESSAGES.FAILED_TO_CREATE_ROLE;
+        this.loading = false;
+      }
+    });
+  }
 
   close(): void {
     this.dialogRef.close();
   }
 }
+
+

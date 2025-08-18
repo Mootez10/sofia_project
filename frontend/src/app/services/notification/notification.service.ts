@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MESSAGES } from 'src/constants/messages';
 
 type SnackType = 'success' | 'error' | 'info' | 'warning';
 
@@ -25,22 +26,22 @@ export class NotificationService {
 
   // Auth presets
   registrationSuccess() {
-    this.success('Registration successful! Please login.');
+    this.success(MESSAGES.REGISTRATION_SUCCESS);
   }
 
   registrationFailed(message?: string) {
-    this.error(message || 'Sign up failed. Please try again.');
+    this.error(message || MESSAGES.REGISTRATION_FAILED);
   }
 
   loginSuccess() {
-    this.success('Logged in successfully. Welcome back!');
+    this.success(MESSAGES.LOGIN_SUCCESS);
   }
 
   loginFailed(message?: string) {
-    this.error(message || 'Login failed. Check your credentials and try again.');
+    this.error(message || MESSAGES.LOGIN_FAILED);
   }
 
   logoutSuccess() {
-    this.info('You have been logged out.');
+    this.info(MESSAGES.LOGOUT_SUCCESS);
   }
 }

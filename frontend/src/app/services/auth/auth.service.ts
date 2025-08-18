@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -8,7 +8,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
+  private http = inject(HttpClient);
+  private router = inject(Router);
   private jwtHelper = new JwtHelperService();
 
   signup(name: string, email: string, password: string, picture?: File) {
@@ -48,7 +49,9 @@ export class AuthService {
     const headers = {
       Authorization: `Bearer ${this.getToken()}`,
     };
-    return this.http.get<{ user: any }>(`${environment.apiUrl}/api/profile`, {
+    return this.http.get<{
+      user: { email: string; _id: string; picture?: string };
+    }>(`${environment.apiUrl}/api/profile`, {
       headers,
     });
   }

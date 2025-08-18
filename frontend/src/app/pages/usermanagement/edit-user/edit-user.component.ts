@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
+import { MESSAGES } from 'src/constants/messages';
 
 @Component({
   selector: 'app-edit-user',
@@ -30,19 +31,24 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class EditUserComponent implements OnInit {
   environment = environment;
-  user: any;
+  user: { _id?: string; id?: string; name: string; email: string; role: string; description: string; picture?: string } = {
+    name: '',
+    email: '',
+    role: '',
+    description: '',
+  };
   selectedFile: File | null = null;
 
-  roles: Array<{ name: string }> = [];
+  roles: { name: string }[] = [];
   loadingRoles = true;
   rolesError = '';
 
-  constructor(
-    private dialogRef: MatDialogRef<EditUserComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { user: any },
-    private http: HttpClient
-  ) {
-    this.user = { ...data.user };
+  private dialogRef = inject(MatDialogRef<EditUserComponent>);
+  private http = inject(HttpClient);
+  private data = inject(MAT_DIALOG_DATA) as { user: { _id?: string; id?: string; name: string; email: string; role: string; description: string; picture?: string } };
+
+  constructor() {
+    this.user = { ...this.data.user };
   }
 
   ngOnInit(): void {
@@ -53,7 +59,7 @@ export class EditUserComponent implements OnInit {
   private fetchRoles(): void {
     this.loadingRoles = true;
     this.rolesError = '';
-    this.http.get<Array<{ name: string }>>(`${environment.apiUrl}/api/roles`).subscribe({
+    this.http.get<{ name: string }[]>(`${environment.apiUrl}/api/roles`).subscribe({
       next: (res) => {
         this.roles = res || [];
 
@@ -64,8 +70,8 @@ export class EditUserComponent implements OnInit {
         this.loadingRoles = false;
       },
       error: (err) => {
-        console.error('Failed to load roles:', err);
-        this.rolesError = 'Failed to load roles. Showing basic roles.';
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
+        this.rolesError = MESSAGES.FAILED_TO_LOAD_ACTIONS;
         const fallback = [{ name: 'admin' }, { name: 'user' }];
         this.roles = [...fallback];
 
@@ -78,8 +84,9 @@ export class EditUserComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0] || null;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] || null;
   }
 
   setDescriptionBasedOnRole(): void {
@@ -113,7 +120,7 @@ export class EditUserComponent implements OnInit {
     const id = this.user._id || this.user.id;
     this.http.put(`${environment.apiUrl}/api/users/${id}`, formData).subscribe({
       next: () => this.dialogRef.close('refresh'),
-      error: (err) => console.error('Error updating user:', err)
+      error: (err) => console.error(MESSAGES.FAILED_TO_UPDATE_ROLE, err)
     });
   }
 }

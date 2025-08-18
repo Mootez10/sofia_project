@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { RoleService } from '../../../services/role/role.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { MESSAGES } from 'src/constants/messages';
+
+interface RoleDto {
+  _id?: string;
+  id?: string;
+  name: string;
+  description: string;
+  actions: string[];
+}
 
 @Component({
   selector: 'app-view-role',
@@ -23,52 +32,50 @@ import { TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
-    TranslateModule
-  ]
+    TranslateModule,
+  ],
 })
 export class ViewRoleComponent implements OnInit {
-  role: any;
-  // will hold action names regardless of where they come from
+  // dialog services via inject()
+  private readonly dialogRef = inject(MatDialogRef<ViewRoleComponent>);
+  private readonly roleService = inject(RoleService);
+  readonly data = inject(MAT_DIALOG_DATA) as { role: RoleDto };
+
+  role: RoleDto | undefined;
   actionNames: string[] = [];
   loading = true;
   error = '';
 
-  constructor(
-    public dialogRef: MatDialogRef<ViewRoleComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { role: any },
-    private roleService: RoleService
-  ) {}
-
   ngOnInit(): void {
     this.role = this.data.role;
 
-    // If the table row already contains names, show them immediately…
+    // Show any preloaded action names immediately
     if (Array.isArray(this.role?.actions) && this.role.actions.length > 0) {
-      // could be strings or Action docs
-      this.actionNames = this.role.actions.map((a: any) => (typeof a === 'string' ? a : a?.name)).filter(Boolean);
+      this.actionNames = this.role.actions.map((a) => a).filter(Boolean);
       this.loading = false;
     }
 
-    // …but also fetch the authoritative list from /api/roles/:id/actions
+    // Fetch authoritative actions from API
     const id = this.role?._id || this.role?.id;
-    if (!id) { this.loading = false; return; }
+    if (!id) {
+      this.loading = false;
+      return;
+    }
 
-   // Fetch actions from RoleAction join
     this.roleService.getRoleWithActions(id).subscribe({
-      next: (res: any) => {
-        // Backend returns: { role, actions: [Action docs] }
+      next: (res: { actions: ({ name?: string } | string)[] }) => {
         if (Array.isArray(res?.actions)) {
           this.actionNames = res.actions
-            .map((a: any) => a?.name || a)  // tolerate strings or docs
-            .filter(Boolean);
+            .map((a) => (typeof a === 'string' ? a : a?.name))
+            .filter(Boolean) as string[];
         }
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Failed to load actions:', err);
-        this.error = 'Failed to load actions.';
+      error: (err: unknown) => {
+        console.error(MESSAGES.FAILED_TO_LOAD_ACTIONS, err);
+        this.error = MESSAGES.FAILED_TO_LOAD_ACTIONS;
         this.loading = false;
-      }
+      },
     });
   }
 

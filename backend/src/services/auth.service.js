@@ -1,9 +1,12 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User.model');
-const MSG = require('../constants/messages');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-// Register a new user
+const MSG = require("../constants/messages");
+const User = require("../models/User.model");
+
+// ✅ Register user
+// Input: { name, email, password, picture, roleName }
+// Output: new user object or throws error
 const registerUser = async ({ name, email, password, picture, roleName }) => {
   try {
     const existingUser = await User.findOne({ email });
@@ -13,7 +16,7 @@ const registerUser = async ({ name, email, password, picture, roleName }) => {
     const existingUsers = await User.find();
 
     // First user becomes admin
-    const role = existingUsers.length === 0 ? 'admin' : roleName;
+    const role = existingUsers.length === 0 ? "admin" : roleName;
 
     const newUser = new User({
       name,
@@ -26,14 +29,16 @@ const registerUser = async ({ name, email, password, picture, roleName }) => {
     await newUser.save();
     return newUser;
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('registerUser error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("registerUser error:", err);
     }
     throw err;
   }
 };
 
-// Authenticate user and return JWT + full user object (including role)
+// ✅ Login user
+// Input: { email, password }
+// Output: { token, user } or throws error
 const loginUser = async ({ email, password }) => {
   try {
     const user = await User.findOne({ email });
@@ -50,7 +55,7 @@ const loginUser = async ({ email, password }) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: "1h" },
     );
 
     return {
@@ -60,12 +65,12 @@ const loginUser = async ({ email, password }) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        picture: user.picture
-      }
+        picture: user.picture,
+      },
     };
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('loginUser error:', err);
+    if (process.env.NODE_ENV === "development") {
+      console.error("loginUser error:", err);
     }
     throw err;
   }

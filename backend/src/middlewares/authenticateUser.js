@@ -1,14 +1,15 @@
-const jwt = require('jsonwebtoken');
-const MSG = require('../constants/messages');
+const jwt = require("jsonwebtoken");
+
+const MSG = require("../constants/messages");
 
 const authenticateUser = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers["authorization"];
 
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('authenticateUser error: No token provided');
+    if (process.env.NODE_ENV === "development") {
+      console.error("authenticateUser error: No token provided");
     }
     return res.status(401).json({ message: MSG.NO_TOKEN });
   }
@@ -18,8 +19,8 @@ const authenticateUser = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('authenticateUser error:', error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("authenticateUser error:", error);
     }
     return res.status(403).json({ message: MSG.INVALID_TOKEN });
   }

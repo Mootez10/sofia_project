@@ -6,7 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint:backend": "npm run -C ../backend lint",
+    "lint:backend:fix": "npm run -C ../backend lint:fix",
+    "lint:frontend": "ng lint",
+    "lint": "npm run lint:backend && npm run lint:frontend"
   },
   "private": true,
   "dependencies": {
@@ -48,7 +52,9 @@
     "@types/bootstrap": "^5.2.10",
     "@types/date-fns": "^2.6.0",
     "@types/jasmine": "~4.3.0",
+    "angular-eslint": "20.1.1",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.29.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
@@ -57,6 +63,7 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
-    "typescript": "~5.6.3"
+    "typescript": "~5.6.3",
+    "typescript-eslint": "8.34.1"
   }
 }

@@ -1,5 +1,5 @@
 // view-user.component.ts
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -28,8 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class ViewUserComponent {
   environment = environment;
 
-  constructor(
-    public dialogRef: MatDialogRef<ViewUserComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { user: any }
-  ) {}
+  public dialogRef = inject(MatDialogRef<ViewUserComponent>);
+  private data = inject(MAT_DIALOG_DATA) as { user: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string } };
 }
+
