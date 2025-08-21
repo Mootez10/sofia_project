@@ -10,7 +10,9 @@
     "lint:backend": "npm run -C ../backend lint",
     "lint:backend:fix": "npm run -C ../backend lint:fix",
     "lint:frontend": "ng lint",
-    "lint": "npm run lint:backend && npm run lint:frontend"
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "stylelint": "stylelint \"src/**/*.{scss,css}\"",
+    "stylelint:fix": "stylelint \"src/**/*.{scss,css}\" --fix"
   },
   "private": true,
   "dependencies": {
@@ -62,6 +64,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "postcss": "^8.5.6",
+    "stylelint": "^16.23.1",
+    "stylelint-config-standard-scss": "^15.0.1",
     "tailwindcss": "^4.1.11",
     "typescript": "~5.6.3",
     "typescript-eslint": "8.34.1"

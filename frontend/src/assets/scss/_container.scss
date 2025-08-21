@@ -1,8 +1,8 @@
 @use "variables" as *;
 
 *,
-:after,
-:before {
+::after,
+::before {
   box-sizing: border-box;
 }
 
@@ -13,7 +13,7 @@ body {
   color: var(--mat-sys-on-background);
 }
 
-.mainWrapper {
+.main-wrapper {
   display: flex;
   min-height: calc(100vh - 72px);
   width: 100%;
@@ -21,8 +21,8 @@ body {
   margin-top: 72px;
 }
 
-@media (max-width: 991px){
-  .mainWrapper{
+@media (width <= 991px){
+  .main-wrapper{
     margin-top: 154px;
   }
 }
@@ -40,14 +40,13 @@ body {
   }
 }
 
-.pageWrapper {
+.page-wrapper {
   padding: 24px;
   min-height: calc(100vh - 70px);
-
   margin: 0 auto;
 
-  &.maxWidth {
-    max-width: $boxedWidth;
+  &.max-width {
+    max-width: $boxed-width;
   }
 }
 
@@ -131,7 +130,7 @@ td.hljs-ln-line.hljs-ln-numbers {
   padding-right: 10px;
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
   html .flex-sm-row {
     flex-direction: row !important;
   }

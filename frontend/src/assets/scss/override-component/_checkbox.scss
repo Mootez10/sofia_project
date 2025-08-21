@@ -1,6 +1,5 @@
 @use "sass:map";
 @use "@angular/material" as mat;
-
 @include mat.checkbox-overrides(
   (
     unselected-focus-icon-color:

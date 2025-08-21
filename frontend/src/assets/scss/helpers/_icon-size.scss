@@ -2,7 +2,7 @@
 
 $columns: 48;
 
-@mixin icon_size {
+@mixin icon-size {
   @for $i from 1 through $columns {
     .icon-#{$i} {
       height: #{$i}px !important;
@@ -12,4 +12,4 @@ $columns: 48;
   }
 }
 
-@include icon_size;
+@include icon-size;

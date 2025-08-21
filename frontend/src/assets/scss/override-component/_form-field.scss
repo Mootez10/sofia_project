@@ -1,6 +1,5 @@
 @use "sass:map";
 @use "@angular/material" as mat;
-
 @include mat.form-field-overrides(
   (
     container-height: 37px,
@@ -16,6 +15,7 @@ html {
       display: none;
     }
   }
+
   .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
     top: calc(var(--mat-form-field-container-height) / 2.15);
   }

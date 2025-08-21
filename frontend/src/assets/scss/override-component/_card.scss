@@ -1,7 +1,6 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 @use "../variables" as *;
-
 @include mat.card-overrides(
   (
     elevated-container-color: $white,
@@ -23,12 +22,15 @@
 html {
   .mat-mdc-card {
     margin-bottom: 30px;
+
     .mat-mdc-card-header {
       padding: 16px 30px !important;
     }
+
     .mat-mdc-card-content {
       padding: 30px !important;
     }
+
     .mdc-card__actions {
       padding: 30px !important;
     }
@@ -36,16 +38,18 @@ html {
 
   .card-hover {
     transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
     &:hover {
       scale: 1.01;
       transition: all 0.1s ease-in 0s;
     }
   }
 
-  .cardBorder {
+  .card-border {
     .mdc-card {
       box-shadow: none !important;
-      border: 1px solid $borderColor !important;
+      border: 1px solid $border-color !important;
+
       &.shadow-none {
         border: 0 !important;
       }

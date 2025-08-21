@@ -3,12 +3,13 @@
 html .topbar {
   background-color: var(--mat-sys-primary);
   position: sticky;
+
  // top: 72px;
   z-index: 9;
   height: $header-height;
   box-shadow: var(--mat-sys-level2);
 
-  @media (max-width: 991px){
+  @media (width <= 991px){
     top: 154px;
   }
 
@@ -27,8 +28,8 @@ html .topbar {
 
 .upgrade-bg {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   height: 100%;
 }
 
@@ -51,7 +52,7 @@ html .topbar {
   display: flex;
   background: linear-gradient(90deg, #0F0533 0%, #1B0A5C 100%);
 
-  @media (max-width: 991px) {
+  @media (width <= 991px) {
     flex-direction: column;
     gap: 16px;
   }
@@ -59,7 +60,7 @@ html .topbar {
   .topstrip-right {
     display: flex;
 
-    @media (max-width: 991px) {
+    @media (width <= 991px) {
       flex-direction: column;
       gap: 16px;
     }
@@ -68,27 +69,25 @@ html .topbar {
   .topstrip-right-inner {
     display: flex;
 
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
       flex-direction: column;
       gap: 16px;
     }
   }
 
   .linkbar {
-    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 1px solid rgb(255 255 255 / 40%);
     padding-left: 20px;
   }
 
   .text-linear-gradient {
-    background: linear-gradient(90deg, #FFFFFF 0%, #8D70F8 100%);
-    -webkit-background-clip: text;
+    background: linear-gradient(90deg, #FFF 0%, #8D70F8 100%);
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
   }
 
   .live-preview-drop {
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgb(255 255 255 / 40%);
     border-radius: 7px;
 
     &:hover,
@@ -109,7 +108,7 @@ html .topbar {
 
   .all-access-pass-btn {
     background-color: #B3F143;
-    color: #000000 !important;
+    color: #000 !important;
     border-radius: 7px;
 
     &:hover {

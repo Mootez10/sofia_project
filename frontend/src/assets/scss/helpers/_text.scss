@@ -57,7 +57,7 @@ $utilities: (
     class: text,
     values: (
       reset: inherit,
-      current: currentColor,
+      current: currentcolor,
     ),
   ),
 );
@@ -68,7 +68,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0px;
+  margin: 0;
 }
 
 .lh-lg {

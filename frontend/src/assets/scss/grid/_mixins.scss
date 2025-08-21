@@ -16,8 +16,7 @@
     @media (min-width: $min) {
       @content;
     }
-  }
-  @else {
+  } @else {
     @content;
   }
 }
@@ -30,8 +29,7 @@
     @media (max-width: $max) {
       @content;
     }
-  }
-  @else {
+  } @else {
     @content;
   }
 }
@@ -40,7 +38,7 @@
   @each $breakpoint, $infix in variables.$breakpoint-infixs {
     $infix: if($infix == '', '', '-#{$infix}');
 
-    @if ($infix != '') {
+    @if $infix != '' {
       $list: '#{$list}, .col#{$infix}';
     }
 

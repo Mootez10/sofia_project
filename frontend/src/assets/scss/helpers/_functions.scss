@@ -5,7 +5,7 @@
   $result: ();
 
   @each $key, $value in $map {
-    @if $key !=0 {
+    @if $key != 0 {
       $result: map.merge($result, ("-" + $key: (-$value)));
     }
   }

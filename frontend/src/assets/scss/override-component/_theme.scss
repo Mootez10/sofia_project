@@ -9,7 +9,6 @@ html {
       typography: $font-family,
     )
   );
-
   @include mat.theme-overrides(
     (
       primary: rgb(27, 132, 255),
@@ -17,9 +16,9 @@ html {
       body-medium-size: 14px,
       body-large-size: 14px,
       outline-variant: #d7dde2,
-      level1: 0px 12px 24px -4px rgb(145 158 171 / 30%),
-      level2: rgba(145, 158, 171, 0.12) 0px 1px 16px,
-      level3: 0px 12px 24px -4px rgb(145 158 171 / 30%),
+      level1: 0 12px 24px -4px rgb(145 158 171 / 30%),
+      level2: rgba(145, 158, 171, 0.12) 0 1px 16px,
+      level3: 0 12px 24px -4px rgb(145 158 171 / 30%),
     )
   );
 }

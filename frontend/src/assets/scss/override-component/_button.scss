@@ -1,7 +1,6 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 @use "../variables" as *;
-
 @include mat.button-overrides(
   (
     protected-hover-container-elevation-shadow: var(--mat-sys-level1),
@@ -19,7 +18,6 @@
     text-label-text-weight: 400,
   )
 );
-
 @include mat.icon-button-overrides(
   (
     icon-color: $text-color,
@@ -35,6 +33,7 @@ html {
   .mat-mdc-button-base.bg-light-success:hover {
     color: $white !important;
   }
+
   .mat-mdc-button-base.bg-light-primary {
     &:hover {
       background-color: var(--mat-sys-primary) !important;
