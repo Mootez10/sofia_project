@@ -5,13 +5,13 @@
   <!-- Name -->
   <mat-form-field appearance="outline" floatLabel="always" class="w-100">
     <mat-label>{{ 'roleManagement.name' | translate }}</mat-label>
-    <input matInput [ngModel]="role.name" name="name" readonly />
+    <input matInput [ngModel]="role?.name" name="name" readonly />
   </mat-form-field>
 
   <!-- Description -->
   <mat-form-field appearance="outline" floatLabel="always" class="w-100">
     <mat-label>{{ 'roleManagement.description' | translate }}</mat-label>
-    <input matInput [ngModel]="role.description" name="description" readonly />
+    <input matInput [ngModel]="role?.description" name="description" readonly />
   </mat-form-field>
 
   <!-- Actions -->

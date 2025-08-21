@@ -29,6 +29,6 @@ export class ViewUserComponent {
   environment = environment;
 
   public dialogRef = inject(MatDialogRef<ViewUserComponent>);
-  private data = inject(MAT_DIALOG_DATA) as { user: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string } };
+  public data = inject(MAT_DIALOG_DATA) as { user: { _id?: string; id?: string; name: string; email: string; role: string; picture?: string; description?: string } };
 }
 

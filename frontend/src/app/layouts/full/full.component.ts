@@ -76,6 +76,10 @@ export class FullComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngOnInit(): void {
+    // No-op, required for OnInit interface
+  }
+
   ngOnDestroy() {
     this.layoutChangesSubscription.unsubscribe();
   }

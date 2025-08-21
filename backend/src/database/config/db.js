@@ -5,6 +5,7 @@ dotenv.config();
 
 mongoose
   .connect(process.env.mongodb_URL)
+  console.log("connected")
   .then(() => {})
   .catch((err) => {
     if (process.env.NODE_ENV === "development") {

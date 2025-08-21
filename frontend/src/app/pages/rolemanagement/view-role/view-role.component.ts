@@ -63,10 +63,10 @@ export class ViewRoleComponent implements OnInit {
     }
 
     this.roleService.getRoleWithActions(id).subscribe({
-      next: (res: { actions: ({ name?: string } | string)[] }) => {
+      next: (res: any) => {
         if (Array.isArray(res?.actions)) {
           this.actionNames = res.actions
-            .map((a) => (typeof a === 'string' ? a : a?.name))
+            .map((a: any) => (typeof a === 'string' ? a : a?.name))
             .filter(Boolean) as string[];
         }
         this.loading = false;
