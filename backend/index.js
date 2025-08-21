@@ -2,6 +2,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const express = require("express");
 
+// Ensure DB connection is established before server starts
+require("./src/database/config/db");
+
 dotenv.config();
 
 const actionRoutes = require("./src/routes/action.routes");
@@ -24,4 +27,12 @@ app.use("/api/actions", actionRoutes);
 
 app.listen(port, () => {
   console.warn(`Server running at http://localhost:${port}`);
+});
+
+// Log uncaught errors
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
 });
