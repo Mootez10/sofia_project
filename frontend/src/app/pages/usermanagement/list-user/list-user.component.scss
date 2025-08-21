@@ -1,14 +1,15 @@
 .user-management-container {
-  padding: 0;
+  padding: 0px;
 }
 
 .user-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 15px;
-
+  
+  
   &:hover {
     transform: translateY(-15px);
-    box-shadow: 0 5px 5px rgb(0 0 0 / 10%);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -18,6 +19,8 @@
   object-fit: cover;
   border: 3px solid #f8f9fa;
 }
+
+
 
 /* Keep your existing styles and add these new ones */
 .text-info {
@@ -57,11 +60,9 @@
 .modal {
   z-index: 1055 !important;
 }
-
 .modal-backdrop {
   z-index: 1050 !important;
 }
-
 body.modal-open {
   overflow: hidden;
 }
@@ -70,14 +71,20 @@ body.modal-open {
   display: block;
   z-index: 1055 !important;
 }
-
 .modal-backdrop.show {
   z-index: 1050 !important;
 }
 
-/* snackbar delete action label */
-/* stylelint-disable-next-line selector-class-pattern */
+
+
 .mat-mdc-snack-bar-container.snackbar-delete .mdc-button__label {
-  color: #fff;
+  color: #ffffff; // dark red for delete
   font-weight: bold;
 }
+
+
+
+
+
+
+

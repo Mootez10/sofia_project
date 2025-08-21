@@ -19,9 +19,9 @@
     height: 100%;
     width: 100%;
     opacity: 0.3;
-    background: radial-gradient(rgb(210 241 223),
-        rgb(211 215 250),
-        rgb(186 216 244)) 0% 0% / 400% 400%;
+    background: radial-gradient(rgb(210, 241, 223),
+        rgb(211, 215, 250),
+        rgb(186, 216, 244)) 0% 0% / 400% 400%;
     animation: 15s ease 0s infinite normal none running gradient;
     z-index: -1;
   }
@@ -62,7 +62,7 @@
   position: relative;
   text-align: center;
 
-  &::before {
+  &:before {
     content: "";
     position: absolute;
     left: 0;
@@ -72,7 +72,7 @@
     background: var(--mat-sys-outline);
   }
 
-  &::after {
+  &:after {
     content: "";
     position: absolute;
     right: 0;
@@ -94,6 +94,7 @@
 }
 
 .mat-mdc-form-field.mat-form-field-invalid {
+
   .mdc-notched-outline__leading,
   .mdc-notched-outline__notch,
   .mdc-notched-outline__trailing {

@@ -29,7 +29,7 @@
 
   /* Header cells */
   .mat-mdc-header-cell {
-    color: #fff;
+    color: #ffffff;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -51,11 +51,9 @@
   .mat-mdc-row {
     transition: background-color 160ms ease;
   }
-
   .mat-mdc-row:nth-child(even) .mat-mdc-cell {
     background: #fafbfc; /* subtle zebra */
   }
-
   .mat-mdc-row:hover .mat-mdc-cell {
     background: #f3f6ff; /* light brand hover */
   }
@@ -138,7 +136,6 @@
 .nice-table .action-icons-group .btn.btn-link {
   text-decoration: none !important;
 }
-
 .nice-table .action-icons-group .btn.btn-link:hover .icon-label {
   text-decoration: underline;
 }

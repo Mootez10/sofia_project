@@ -1,9 +1,5 @@
 /* view-role.component.scss */
 
-/* Allow Angular's ::ng-deep and MDC/Mat class names in this file only */
- /* stylelint-disable selector-pseudo-element-no-unknown */
- /* stylelint-disable selector-class-pattern */
-
 /* Give the outline the same rounded corners as Edit */
 :host ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
   border-radius: 12px; /* match Edit radius */
@@ -16,16 +12,13 @@
 }
 
 /* Make readonly fields look consistent but non-editable */
-:host ::ng-deep input.mat-mdc-input-element[readonly] {
-  background: #f9fafb; /* subtle bg (optional) */
+:host ::ng-deep input[readonly].mat-mdc-input-element {
+  background: #f9fafb;        /* subtle bg (optional) */
   cursor: default;
 }
 
 /* Optional: suppress focus ring for readonly */
-:host ::ng-deep input.mat-mdc-input-element[readonly]:focus {
+:host ::ng-deep input[readonly].mat-mdc-input-element:focus {
   outline: none;
   box-shadow: none;
 }
-
-/* stylelint-enable selector-class-pattern */
-/* stylelint-enable selector-pseudo-element-no-unknown */

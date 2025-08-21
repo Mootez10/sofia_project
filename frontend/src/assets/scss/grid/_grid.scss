@@ -19,13 +19,15 @@
   }
 }
 
-@include mixins.make-grid-columns;
+@include mixins.make-grid-columns();
 
 
 @each $breakpoint, $infix in variables.$breakpoint-infixs {
-  @if $breakpoint == 'xsmall' {
+  @if ($breakpoint== 'xsmall') {
     @include mixins.loop-grid-columns(variables.$grid-columns, $infix);
-  } @else {
+  }
+
+  @else {
     @include mixins.bp-gt($breakpoint) {
       @include mixins.loop-grid-columns(variables.$grid-columns, $infix);
     }

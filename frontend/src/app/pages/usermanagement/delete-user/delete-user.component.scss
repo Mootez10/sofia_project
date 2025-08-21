@@ -53,11 +53,17 @@
 
 /* ✅ FORCE the raised button to red (works across Angular Material MDC versions) */
 .btn-yes.mat-mdc-raised-button {
+  /* New MDC tokens */
+  --mdc-filled-button-container-color: #ef4444;
+  --mdc-filled-button-label-text-color: #ffffff;
+
+  /* Fallbacks to beat theme rules */
   background-color: #ef4444 !important;
-  color: #fff !important;
+  color: #ffffff !important;
+
   border-radius: 10px;
   padding: 8px 16px;
-  box-shadow: 0 1px 0 rgb(0 0 0 / 20%);
+  box-shadow: 0 1px 0 rgba(0,0,0,.2);
   .mdc-button__label { font-weight: 700; }
 }
 
@@ -65,7 +71,7 @@
 .btn-no.mat-mdc-outlined-button {
   border-radius: 10px;
   padding: 8px 16px;
-  background: #fff !important;
+  background: #ffffff !important;
   border-color: #d1d5db !important;     /* gray-300 */
   color: #374151 !important;            /* gray-700 */
   .mdc-button__label { font-weight: 700; }
